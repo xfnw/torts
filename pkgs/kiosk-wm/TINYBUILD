@@ -1,0 +1,29 @@
+pname="kiosk-wm"
+version="r6.340c07c"
+
+downloadPhase() {
+	tce-load -wil compiletc git sstrip libX11-dev
+
+	fetchGitRev \
+		kiosk-wm \
+		https://github.com/Friz64/kiosk-wm \
+		340c07c6a1345e451e19d269a26b6287f3f60d55
+}
+
+buildPhase() {
+	gcc -lX11 -o kiosk-wm/kiosk-wm kiosk-wm/kiosk-wm.c
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+	install kiosk-wm/kiosk-wm out/usr/local/bin
+}
+
+fixupPhase() {
+	sstrip -z out/usr/local/bin/kiosk-wm
+}
+
+metadataPhase() {
+	echo libX11.tcz > kiosk-wm.tcz.dep
+}
+
