@@ -74,6 +74,8 @@ class Handler(BaseHTTPRequestHandler):
                     filename += ".tcz.md5.txt"
                 case b"info":
                     filename += ".tcz.info"
+                case b"list":
+                    filename += ".tcz.list"
                 case _:
                     continue
 
