@@ -32,7 +32,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def _handle_script(self):
         script = self.common
-        with open("pkgs/"+self.package+"/TINYBUILD", 'rb') as f:
+        with open("pkgs/" + self.package + "/TINYBUILD", "rb") as f:
             script += f.read()
         script += b"\n__tinyports\n"
 
@@ -92,7 +92,7 @@ def main():
     parser.add_argument("package")
     args = parser.parse_args()
 
-    with open("common.sh", 'rb') as f:
+    with open("common.sh", "rb") as f:
         common = f.read()
 
     if not os.path.isfile("pkgs/" + args.package + "/TINYBUILD"):
