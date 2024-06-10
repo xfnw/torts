@@ -70,6 +70,8 @@ class Handler(BaseHTTPRequestHandler):
                     filename += ".tcz.info"
                 case b"list":
                     filename += ".tcz.list"
+                case b"zsync":
+                    filename += ".tcz.zsync"
                 case _:
                     continue
 

@@ -54,14 +54,15 @@ submitPhase() {
 		esac
 	done
 
-	dep= info= list=
+	dep= info= list= zsync=
 	[ -e "$pname.tcz.dep" ] && dep="-Fdep=@$pname.tcz.dep"
 	[ -e "$pname.tcz.info" ] && info="-Finfo=@$pname.tcz.info"
 	[ -e "$pname.tcz.list" ] && list="-Flist=@$pname.tcz.list"
+	[ -e "$pname.tcz.zsync" ] && zsync="-Fzsync=@$pname.tcz.zsync"
 
 	tce-load -wil curl
-	# XXX: dep info and list intentionally unquoted
-	curl "-Ftcz=@$pname.tcz" "-Fmd5=@$pname.tcz.md5.txt" $dep $info $list \
+	# XXX: intentionally unquoted
+	curl "-Ftcz=@$pname.tcz" "-Fmd5=@$pname.tcz.md5.txt" $dep $info $list $zsync \
 		"$SCRIPT?ver=$(getMajorVer)&arch=$(getBuild)"
 }
 
