@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source /etc/init.d/tc-functions
+. /etc/init.d/tc-functions
 
 set -eux
 

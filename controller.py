@@ -90,7 +90,7 @@ def create_script(package):
     scrlen = script.count(b"\n") + 6
     tail = f"""
 tail -n +{scrlen} $0 | tar xzf -
-source ./TINYBUILD
+. ./TINYBUILD
 __tinyports
 exit 0
 """
