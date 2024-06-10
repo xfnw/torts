@@ -6,6 +6,8 @@ from urllib.parse import urlparse, parse_qs
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from requests_toolbelt.multipart.decoder import MultipartDecoder
 
+from getsource import cache_src
+
 NAMEPATTERN = re.compile(b'name="([^"]+)"', re.IGNORECASE)
 
 
@@ -86,6 +88,8 @@ def create_script(package):
     archive = io.BytesIO()
     with tarfile.open(fileobj=archive, mode="w:gz") as t:
         t.add("pkgs/" + package, arcname=".")
+        if srcpath := cache_src(package):
+            t.add(srcpath, arcname="src")
 
     scrlen = script.count(b"\n") + 6
     tail = f"""

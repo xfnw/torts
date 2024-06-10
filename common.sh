@@ -4,13 +4,6 @@
 
 set -eux
 
-fetchGitRev() {
-	git init -- "$1"
-	git -C "$1" remote add origin -- "$2"
-	git -C "$1" fetch --depth=1 origin -- "$3:build"
-	git -C "$1" checkout build
-}
-
 downloadPhase() {
 	: doing nothing
 }
