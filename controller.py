@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import re, os, sys, argparse
+import re, io, os, sys, tarfile, argparse
 from functools import partial
 from urllib.parse import urlparse, parse_qs
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -10,9 +10,9 @@ NAMEPATTERN = re.compile(b'name="([^"]+)"', re.IGNORECASE)
 
 
 class Handler(BaseHTTPRequestHandler):
-    def __init__(self, package, common, *args, **kwargs):
+    def __init__(self, package, script, *args, **kwargs):
         self.package = package
-        self.common = common
+        self.script = script
         super().__init__(*args, **kwargs)
 
     def _ok(self, data):
@@ -28,15 +28,7 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(b"bonk bonk bonk bonk\n")
 
     def do_GET(self):
-        self._handle_script()
-
-    def _handle_script(self):
-        script = self.common
-        with open("pkgs/" + self.package + "/TINYBUILD", "rb") as f:
-            script += f.read()
-        script += b"\n__tinyports\n"
-
-        self._ok(script)
+        self._ok(self.script)
 
     def do_POST(self):
         try:
@@ -87,6 +79,28 @@ class Handler(BaseHTTPRequestHandler):
         self._ok(b"nyaa~\n")
 
 
+def create_script(package):
+    with open("common.sh", "rb") as f:
+        script = f.read()
+
+    archive = io.BytesIO()
+    with tarfile.open(fileobj=archive, mode="w:gz") as t:
+        t.add("pkgs/" + package, arcname=".")
+
+    scrlen = script.count(b"\n") + 6
+    tail = f"""
+tail -n +{scrlen} $0 | tar xzf -
+source ./TINYBUILD
+__tinyports
+exit 0
+"""
+    script += tail.encode("utf-8")
+
+    script += archive.getvalue()
+
+    return script
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--bindhost", default="")
@@ -94,14 +108,13 @@ def main():
     parser.add_argument("package")
     args = parser.parse_args()
 
-    with open("common.sh", "rb") as f:
-        common = f.read()
-
     if not os.path.isfile("pkgs/" + args.package + "/TINYBUILD"):
         print(f"package {args.package} does not exist")
         sys.exit(1)
 
-    handler = partial(Handler, args.package, common)
+    script = create_script(args.package)
+
+    handler = partial(Handler, args.package, script)
     httpd = HTTPServer((args.bindhost, args.port), handler)
     (host, port) = httpd.server_address
     if ":" in host:
