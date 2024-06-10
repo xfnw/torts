@@ -29,7 +29,8 @@ installPhase() {
 }
 
 fixupPhase() {
-	: doing nothing
+	tce-load -wil findutils sstrip
+	find out -type f -executable -exec sstrip -z {} \;
 }
 
 packagePhase() {

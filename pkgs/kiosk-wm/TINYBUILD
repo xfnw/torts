@@ -3,7 +3,7 @@ version="r6.340c07c"
 src="git+https://github.com/Friz64/kiosk-wm#340c07c6a1345e451e19d269a26b6287f3f60d55"
 
 downloadPhase() {
-	tce-load -wil compiletc sstrip libX11-dev
+	tce-load -wil compiletc libX11-dev
 }
 
 buildPhase() {
@@ -13,10 +13,6 @@ buildPhase() {
 installPhase() {
 	mkdir -p out/usr/local/bin
 	install src/kiosk-wm out/usr/local/bin
-}
-
-fixupPhase() {
-	sstrip -z out/usr/local/bin/kiosk-wm
 }
 
 metadataPhase() {
