@@ -9,7 +9,11 @@ from urllib.parse import urlparse
 
 class Fetchers:
     def __init__(self):
-        self.types = {"git+https": self.fetch_git_https}
+        self.types = {
+            "git+https": self.fetch_git_https,
+            "git+http": self.fetch_git_http,
+            "git": self.fetch_git,
+        }
 
     def fetch(self, url, target, name):
         purl = urlparse(url)
@@ -26,10 +30,16 @@ class Fetchers:
         os.rmdir(tmp)
 
     def fetch_git_https(self, url, target):
+        self.fetch_git(url, target, scheme="https")
+
+    def fetch_git_http(self, url, target):
+        self.fetch_git(url, target, scheme="http")
+
+    def fetch_git(self, url, target, scheme="git"):
         rev = url.fragment
         if len(rev) < 40:
             raise Exception("full git rev required")
-        url = url._replace(scheme="https", fragment="").geturl()
+        url = url._replace(scheme=scheme, fragment="").geturl()
 
         run(["git", "-C", target, "init"], check=True)
         run(["git", "-C", target, "remote", "add", "origin", "--", url], check=True)
