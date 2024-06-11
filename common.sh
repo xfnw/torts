@@ -15,6 +15,8 @@ for arg in $(cat /proc/cmdline); do
 	esac
 done
 
+trap '__broken trapped' EXIT
+
 set -eux
 
 downloadPhase() {
@@ -71,11 +73,15 @@ submitPhase() {
 		"$SCRIPT?ver=$MAJORVER&arch=$ARCH"
 }
 
+__broken(){
+	tce-load -wil curl
+	curl -X POST "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=$1"
+}
+
 __tinyports() {
 	: "building $pname v$version"
 	if [ "$broken" != "${broken#*"$FULLVER"}" ]; then
-		tce-load -wil curl
-		curl -X POST "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=1"
+		__broken marked
 		return
 	fi
 	mkdir out
