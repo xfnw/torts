@@ -52,23 +52,28 @@ class Fetchers:
         shutil.rmtree(f"{target}/.git", ignore_errors=True)
 
 
-def get_src_uri(pkg):
-    src = None
+def get_tinybuild_var(pkg, var):
+    var += "="
+    val = None
     with open(f"pkgs/{pkg}/TINYBUILD", "r") as f:
 
         for part in shlex.split(f.read()):
-            if part.startswith("src="):
-                src = part.split("=", 1)[1]
+            if part.startswith(var):
+                val = part.split("=", 1)[1]
                 break
 
-    return src
+    return val
+
+
+def hash_src(uri):
+    return md5(uri.encode("utf-8")).hexdigest()
 
 
 def cache_src(pkg, no_fetch=False):
-    uri = get_src_uri(pkg)
+    uri = get_tinybuild_var(pkg, "src")
     if uri is None:
         return None
-    hash = md5(uri.encode("utf-8")).hexdigest()
+    hash = hash_src(uri)
     path = f"cache/{hash[:2]}"
     fullpath = f"{path}/{hash[2:]}"
     if os.path.isdir(fullpath):
@@ -83,7 +88,22 @@ def cache_src(pkg, no_fetch=False):
     return fullpath
 
 
-def needs_rebuild(pkg):
-    if cache_src(pkg, no_fetch=True) == False:
+def expected_rel(pkg):
+    uri = get_tinybuild_var(pkg, "src")
+    if uri is None:
+        hash = "0" * 32
+    else:
+        hash = hash_src(uri)
+    rel = get_tinybuild_var(pkg, "rel") or 0
+    return f"{hash}-{rel}\n".encode("utf-8")
+
+
+def needs_rebuild(pkg, tcver, arch):
+    expect = expected_rel(pkg)
+    relpath = f"result/{tcver}.x/{arch}/tcz/{pkg}.tcz.rel"
+    if not os.path.isfile(relpath):
         return True
+    with open(relpath, "rb") as f:
+        if f.read() != expect:
+            return True
     return False

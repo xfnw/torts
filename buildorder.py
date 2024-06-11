@@ -33,14 +33,14 @@ def depends(pkg, visited, parent=None):
     print(pkg)
 
 
-def rebuilds(pkg, visited, rebuilded, parent=None):
+def rebuilds(pkg, visited, rebuilded, tcver, arch, parent=None):
     if pkg in rebuilded:
         return True
     if pkg in visited:
         return False
     ensure_exists(pkg, parent=parent)
 
-    if needs_rebuild(pkg):
+    if needs_rebuild(pkg, tcver, arch):
         rebuilded.add(pkg)
         print(pkg)
         return True
@@ -52,7 +52,7 @@ def rebuilds(pkg, visited, rebuilded, parent=None):
             for dep in reqs.read().splitlines():
                 if len(dep) == 0 or dep[0] == "#":
                     continue
-                if rebuilds(dep, visited, rebuilded, parent=pkg):
+                if rebuilds(dep, visited, rebuilded, tcver, arch, parent=pkg):
                     rebuilded.add(pkg)
                     print(pkg)
                     return True
@@ -63,10 +63,12 @@ def rebuilds(pkg, visited, rebuilded, parent=None):
 def main():
     visited = set()
 
-    if len(sys.argv) > 1 and sys.argv[1] == "r":
+    if len(sys.argv) > 3 and sys.argv[1] == "r":
+        tcver = sys.argv[2]
+        arch = sys.argv[3]
         rebuilded = set()
         for pkg in os.listdir("pkgs"):
-            rebuilds(pkg, visited, rebuilded)
+            rebuilds(pkg, visited, rebuilded, tcver, arch)
         return
 
     for pkg in os.listdir("pkgs"):
