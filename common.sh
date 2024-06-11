@@ -2,6 +2,18 @@
 
 . /etc/init.d/tc-functions
 
+MAJORVER="$(getMajorVer)"
+ARCH="$(getBuild)"
+broken=
+
+for arg in $(cat /proc/cmdline); do
+	case "$arg" in
+		script=*)
+			SCRIPT="$(printf %s "${arg#*=}")"
+			;;
+	esac
+done
+
 set -eux
 
 downloadPhase() {
@@ -46,14 +58,6 @@ submitPhase() {
 	tce-load -wil submitqc
 	submitqc -c --libs --fix --strip "$pname.tcz"
 
-	for arg in $(cat /proc/cmdline); do
-		case "$arg" in
-			script=*)
-				SCRIPT="$(printf %s "${arg#*=}")"
-				;;
-		esac
-	done
-
 	dep= info= list= zsync=
 	[ -e "$pname.tcz.dep" ] && dep="-Fdep=@$pname.tcz.dep"
 	[ -e "$pname.tcz.info" ] && info="-Finfo=@$pname.tcz.info"
@@ -63,11 +67,16 @@ submitPhase() {
 	tce-load -wil curl
 	# XXX: intentionally unquoted
 	curl "-Ftcz=@$pname.tcz" "-Fmd5=@$pname.tcz.md5.txt" $dep $info $list $zsync \
-		"$SCRIPT?ver=$(getMajorVer)&arch=$(getBuild)"
+		"$SCRIPT?ver=$MAJORVER&arch=$ARCH"
 }
 
 __tinyports() {
 	: "building $pname v$version"
+	if [ "$broken" != "${broken#*"$MAJORVER"}" ]; then
+		tce-load -wil curl
+		curl -X POST "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=1"
+		exit 0
+	fi
 	mkdir out
 	downloadPhase
 	patchPhase

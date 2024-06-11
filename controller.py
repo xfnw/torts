@@ -46,6 +46,10 @@ class Handler(BaseHTTPRequestHandler):
         query = parse_qs(url.query)
         ver = query["ver"][0]
         arch = query["arch"][0]
+        if "broken" in query:
+            self._ok(b"package marked as broken\n")
+            return
+
         prefix = f"result/{ver}.x/{arch}/tcz/"
         os.makedirs(prefix, exist_ok=True)
 
