@@ -2,7 +2,8 @@
 
 . /etc/init.d/tc-functions
 
-MAJORVER="$(getMajorVer)"
+FULLVER="$(getFullVer)"
+MAJORVER="${FULLVER%.*}"
 ARCH="$(getBuild)"
 broken=
 
@@ -72,7 +73,7 @@ submitPhase() {
 
 __tinyports() {
 	: "building $pname v$version"
-	if [ "$broken" != "${broken#*"$MAJORVER"}" ]; then
+	if [ "$broken" != "${broken#*"$FULLVER"}" ]; then
 		tce-load -wil curl
 		curl -X POST "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=1"
 		exit 0
