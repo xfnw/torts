@@ -76,7 +76,7 @@ __tinyports() {
 	if [ "$broken" != "${broken#*"$FULLVER"}" ]; then
 		tce-load -wil curl
 		curl -X POST "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=1"
-		exit 0
+		return
 	fi
 	mkdir out
 	downloadPhase

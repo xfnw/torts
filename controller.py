@@ -105,7 +105,7 @@ def create_script(package):
 tail -n +{scrlen} $0 | tar xzf -
 . ./TINYBUILD
 __tinyports
-exit 0
+sudo reboot -f
 """
     script += tail.encode("utf-8")
 
