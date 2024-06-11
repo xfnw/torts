@@ -1,7 +1,0 @@
-#!/bin/sh
-
-./buildorder.py |
-while read -r package; do
-	./controller.py "$@" "$package"
-done
-
