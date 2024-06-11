@@ -28,11 +28,13 @@ patchPhase() {
 }
 
 configurePhase() {
-	: doing nothing
+	if [ -x src/configure ]; then
+		( cd src && ./configure )
+	fi
 }
 
 buildPhase() {
-	: doing nothing
+	make -C src
 }
 
 checkPhase() {
@@ -40,7 +42,7 @@ checkPhase() {
 }
 
 installPhase() {
-	: doing nothing
+	make -C src install DESTDIR="$PWD/out"
 }
 
 fixupPhase() {
