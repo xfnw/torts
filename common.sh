@@ -2,7 +2,7 @@
 
 . /etc/init.d/tc-functions
 
-FULLVER="$(getFullVer)"
+FULLVER="$(getFullVer || cat /usr/share/doc/tc/release.txt)"
 MAJORVER="${FULLVER%.*}"
 ARCH="$(getBuild)"
 broken=
