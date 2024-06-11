@@ -54,7 +54,7 @@ def get_src_uri(pkg):
     return src
 
 
-def cache_src(pkg):
+def cache_src(pkg, no_fetch=False):
     uri = get_src_uri(pkg)
     if uri is None:
         return None
@@ -65,6 +65,15 @@ def cache_src(pkg):
         return fullpath
     os.makedirs(path, exist_ok=True)
 
+    if no_fetch:
+        return False
+
     fetcher = Fetchers()
     fetcher.fetch(uri, path, hash[2:])
     return fullpath
+
+
+def needs_rebuild(pkg):
+    if cache_src(pkg, no_fetch=True) == False:
+        return True
+    return False
