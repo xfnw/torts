@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import re, io, os, sys, tarfile, argparse
+from socket import AF_INET6
 from functools import partial
 from urllib.parse import urlparse, parse_qs
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -127,9 +128,11 @@ def main():
 
     script = create_script(args.package)
 
+    if ":" in args.bindhost:
+        HTTPServer.address_family = AF_INET6
     handler = partial(Handler, args.package, script)
     httpd = HTTPServer((args.bindhost, args.port), handler)
-    (host, port) = httpd.server_address
+    (host, port, *_) = httpd.server_address
     if ":" in host:
         print(f"http://[{host}]:{port}")
     else:
