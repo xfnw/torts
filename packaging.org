@@ -1,2 +1,121 @@
 #+TITLE: packaging guidelines
 
+everything is optional unless otherwise noted
+
+* TINYBUILD file
+this file is required.
+
+a shell script with build information.
+
+located at ~pkgs/{packagename}/TINYBUILD~
+
+** variables
+these variables are often parsed without evaluation as a shell script,
+only use literal values in these variables.
+
+*** pname
+this variable is required.
+
+the package name while inside build environment. note that the names
+of the resulting package as decided by the controller server depends
+on the directory name, /not/ this variable. this is mostly used by the
+default phases.
+
+*** version
+this variable is required.
+
+what it says on the tin.
+
+*** src
+a [[*fetchers][fetcher]] uri
+
+any downloaded content will be made available in the ~src~ directory
+when building.
+
+sources are addressed based on a hash of this value, so avoid pointing
+at locations with changing content. when its value is changed, a
+rebuild will be triggered.
+
+*** broken
+a space-delimited list of major tinycore versions this package should
+not be built on.
+
+*** rel
+may be incremented to trigger a rebuild without changing the value of
+[[*src][src]]. when the value of src changes, this should be reset or removed.
+
+where left unspecified, equivalent to a value of ~0~.
+
+** phases
+overridable shell functions for different build steps. some have
+defaults for common packaging tasks.
+
+*** downloadPhase
+load any dependencies, and (if you must) download any sources that
+could not be fetched via [[*src][src]].
+
+*** patchPhase
+apply any patches
+
+*** configurePhase
+setup the build configuration
+
+defaults to running ~configure~ if it exists
+
+*** buildPhase
+compile the package
+
+defaults to running ~make~
+
+*** checkPhase
+verify functionality with tests
+
+*** installPhase
+install package contents to ~out~
+
+defaults to running ~make install~ with a ~DESTDIR~ pointing to ~out~
+
+*** fixupPhase
+cleaning up after install
+
+defaults to recursively running ~sstrip -z~ on every file marked
+executable in ~out~.
+
+note that this default will break dynamically linked libraries,
+causing strange issues such as =file in wrong format= linker
+errors. you'll likely want to override this if packaging a library.
+
+*** packagePhase
+create the tcz itself
+
+defaults to creating ~$pname.tcz~ from the contents of the ~out~
+directory
+
+*** metadataPhase
+create metadata such as the ~tcz.dep~ and ~tcz.info~ files
+
+*** submitPhase
+final checks and submitting the package
+
+defaults to running [[https://github.com/tinycorelinux/submitqc][submitqc]] on ~$pname.tcz~ and then uploading
+~$pname.tcz~ and ~$pname.tcz.md5.txt~ (plus ~$pname.tcz.dep~,
+~$pname.tcz.info~, ~$pname.tcz.list~, and/or ~$pname.tcz.zsync~ if
+they exist) to the controller server.
+
+* DEPENDS file
+a list of /in-tree/ packages that must be built before the current
+one. blank lines are ignored and lines beginning with ~#~ are
+comments.
+
+located at ~pkgs/{packagename}/DEPENDS~
+
+* fetchers
+
+** git
+a scheme of ~git~, ~git+http~, or ~git+https~ will attempt a shallow
+clone of the commit hash specified in the uri fragment. the repository
+itself is not kept.
+
+since this fetches a specific commit, which requires special server
+support, this will not work in all cases. specifically, downloading
+from repositories using the "dumb" http protocol is unsupported.
