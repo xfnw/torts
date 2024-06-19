@@ -2,8 +2,7 @@
 
 . /etc/init.d/tc-functions
 
-FULLVER="$(getFullVer || cat /usr/share/doc/tc/release.txt)"
-MAJORVER="${FULLVER%.*}"
+MAJORVER="$(getMajorVer)"
 ARCH="$(getBuild)"
 broken=
 
@@ -83,7 +82,7 @@ __broken(){
 
 __tinyports() {
 	: "building $pname v$version"
-	if [ "$broken" != "${broken#*"$FULLVER"}" ]; then
+	if [ "$broken" != "${broken#*"$MAJORVER"}" ]; then
 		__broken marked
 		return
 	fi

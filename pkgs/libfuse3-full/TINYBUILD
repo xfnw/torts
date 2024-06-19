@@ -1,7 +1,7 @@
 pname="libfuse3-full"
 version="3.16.2"
 src="git+https://github.com/libfuse/libfuse#7a92727d97c10290b3501d86a194738973edb61d"
-broken="10.1"
+broken="10"
 
 downloadPhase() {
 	tce-load -wil compiletc meson
