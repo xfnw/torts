@@ -1,10 +1,13 @@
 #+TITLE: packaging guidelines
+#+OPTIONS: toc:nil
 
 this is all subject to change. torts is in its early stages and makes
 no stability guarantees. keep things in-tree if you do not want them
 to get broken.
 
 all the things are optional unless otherwise noted.
+
+#+TOC: headlines 3
 
 * TINYBUILD file
 this file is required.
