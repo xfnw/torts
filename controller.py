@@ -134,9 +134,9 @@ def main():
     httpd = HTTPServer((args.bindhost, args.port), handler)
     (host, port, *_) = httpd.server_address
     if ":" in host:
-        print(f"http://[{host}]:{port}")
+        print(f"http://[{host}]:{port}", args.package)
     else:
-        print(f"http://{host}:{port}")
+        print(f"http://{host}:{port}", args.package)
 
     httpd.serve_forever()
 
