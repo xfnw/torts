@@ -107,3 +107,10 @@ def needs_rebuild(pkg, tcver, arch):
         if f.read() != expect:
             return True
     return False
+
+
+def is_broken(pkg, tcver, _arch):
+    broken = get_tinybuild_var(pkg, "broken")
+    if broken is None:
+        return False
+    return tcver in broken.split()

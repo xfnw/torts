@@ -4,7 +4,6 @@
 
 MAJORVER="$(getMajorVer)"
 ARCH="$(getBuild)"
-broken=
 
 for arg in $(cat /proc/cmdline); do
 	case "$arg" in
@@ -82,10 +81,6 @@ __broken(){
 
 __tinyports() {
 	: "building $pname v$version"
-	if [ "$broken" != "${broken#*"$MAJORVER"}" ]; then
-		__broken marked
-		return
-	fi
 	mkdir out
 	(downloadPhase)
 	(patchPhase)

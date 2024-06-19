@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os, sys
-from getsource import needs_rebuild
+from getsource import needs_rebuild, is_broken
 
 
 def eprint(*yip, **yap):
@@ -22,13 +22,15 @@ def rebuilds(pkg, visited, rebuilded, tcver, arch, parent=None):
     if pkg in visited:
         return False
     ensure_exists(pkg, parent=parent)
+    visited.add(pkg)
 
+    if is_broken(pkg, tcver, arch):
+        return False
     if needs_rebuild(pkg, tcver, arch):
         rebuilded.add(pkg)
         print(pkg)
         return True
 
-    visited.add(pkg)
     reqname = "pkgs/" + pkg + "/DEPENDS"
     if os.path.isfile(reqname):
         with open(reqname, "r") as reqs:
