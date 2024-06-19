@@ -16,23 +16,6 @@ def ensure_exists(pkg, parent=None):
         sys.exit(1)
 
 
-def depends(pkg, visited, parent=None):
-    if pkg in visited:
-        return
-    ensure_exists(pkg, parent=parent)
-
-    visited.add(pkg)
-    reqname = "pkgs/" + pkg + "/DEPENDS"
-    if os.path.isfile(reqname):
-        with open(reqname, "r") as reqs:
-            for dep in reqs.read().splitlines():
-                if len(dep) == 0 or dep[0] == "#":
-                    continue
-                depends(dep, visited, parent=pkg)
-
-    print(pkg)
-
-
 def rebuilds(pkg, visited, rebuilded, tcver, arch, parent=None):
     if pkg in rebuilded:
         return True
@@ -61,18 +44,18 @@ def rebuilds(pkg, visited, rebuilded, tcver, arch, parent=None):
 
 
 def main():
-    visited = set()
-
-    if len(sys.argv) > 3 and sys.argv[1] == "r":
-        tcver = sys.argv[2]
-        arch = sys.argv[3]
-        rebuilded = set()
-        for pkg in os.listdir("pkgs"):
-            rebuilds(pkg, visited, rebuilded, tcver, arch)
+    if len(sys.argv) <= 2:
+        print("usage: tcver arch")
         return
 
+    tcver = sys.argv[1]
+    arch = sys.argv[2]
+    visited = set()
+    rebuilded = set()
+
     for pkg in os.listdir("pkgs"):
-        depends(pkg, visited)
+        rebuilds(pkg, visited, rebuilded, tcver, arch)
+    return
 
 
 if __name__ == "__main__":
