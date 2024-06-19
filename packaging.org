@@ -1,6 +1,10 @@
 #+TITLE: packaging guidelines
 
-everything is optional unless otherwise noted
+this is all subject to change. torts is in its early stages and makes
+no stability guarantees. keep things in-tree if you do not want them
+to get broken.
+
+all the things are optional unless otherwise noted.
 
 * TINYBUILD file
 this file is required.
