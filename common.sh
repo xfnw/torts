@@ -29,7 +29,8 @@ patchPhase() {
 
 configurePhase() {
 	if [ -x src/configure ]; then
-		( cd src && ./configure )
+		cd src
+		./configure
 	fi
 }
 
@@ -87,15 +88,15 @@ __tinyports() {
 		return
 	fi
 	mkdir out
-	downloadPhase
-	patchPhase
-	configurePhase
-	buildPhase
-	checkPhase
-	installPhase
-	fixupPhase
-	packagePhase
-	metadataPhase
-	submitPhase
+	(downloadPhase)
+	(patchPhase)
+	(configurePhase)
+	(buildPhase)
+	(checkPhase)
+	(installPhase)
+	(fixupPhase)
+	(packagePhase)
+	(metadataPhase)
+	(submitPhase)
 }
 
