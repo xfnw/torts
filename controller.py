@@ -54,7 +54,7 @@ class Handler(BaseHTTPRequestHandler):
             f.write(expected_rel(self.package))
 
         if "broken" in query:
-            self._ok(b"package marked as broken\n")
+            self._ok(b"package broken\n")
             return
 
         contenttype = self.headers.get("Content-Type")
