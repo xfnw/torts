@@ -1,0 +1,39 @@
+pname="irccrab"
+version="1.1.0"
+src="git+https://github.com/xfnw/irccrab#0f77322cab1222f4c9f76cff8584f624d63ca6f5"
+
+# rust is not packaged for tc 10
+broken="10"
+
+downloadPhase() {
+	tce-load -wil compiletc rust
+}
+
+patchPhase() {
+	sed -i 's#/etc/ssl/cert.pem#/usr/local/etc/ssl/certs/ca-certificates.crt#' src/src/main.rs
+}
+
+buildPhase() {
+	cd src
+
+	# rust ring does not support non-sse2 targets,
+	# pretend that we (hopefully?) support it.
+	# https://github.com/briansmith/ring/issues/1999
+	grep -q sse2 /proc/cpuinfo && export RUSTFLAGS="-C target-feature=+sse2" 
+	export SSL_CERT_FILE=/usr/local/etc/ssl/certs/ca-certificates.crt
+
+	cargo build --profile smol
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+
+	install src/target/smol/irccrab out/usr/local/bin
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+ca-certificates.tcz
+EOF
+}
+
