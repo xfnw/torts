@@ -57,6 +57,9 @@ where left unspecified, equivalent to a value of ~0~.
 overridable shell functions for different build steps. some have
 defaults for common packaging tasks.
 
+each phase is run inside a new subshell, so changing directories will
+not mess with other phases.
+
 *** downloadPhase
 load any dependencies, and (if you must) download any sources that
 could not be fetched via [[*src][src]].
