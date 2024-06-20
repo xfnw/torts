@@ -1,0 +1,11 @@
+#+TITLE: building torts
+
+* rebuilds
+to start a controller listener rebuilding all packages that need to
+rebuilt for tc 15 on x86:
+#+begin_example
+./buildorder.py 15 x86 | xargs -n1 -rd\\n ./controller.py
+#+end_example
+
+by default ~controller.py~ chooses a random port to use each time, but
+setting ~--bindhost~ and ~--port~ flags can override where it listens.
