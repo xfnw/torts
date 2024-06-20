@@ -1,4 +1,4 @@
-#+TITLE: packaging guidelines
+#+TITLE: packaging guide
 #+OPTIONS: toc:nil
 
 this is all subject to change. torts is in its early stages and makes
