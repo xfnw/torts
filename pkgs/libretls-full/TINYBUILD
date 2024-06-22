@@ -1,0 +1,29 @@
+pname="libretls-full"
+version="3.8.1"
+src="git+https://git.causal.agency/libretls#198349012002f8d30013eb23c7d6df6a3c9cc65a"
+
+# openssl is too old on tc 10
+# no idea why openssl seemingly is just not packaged in tc 11 12 and 13?
+broken="10 11 12 13"
+
+downloadPhase() {
+	tce-load -wil compiletc automake libtool-dev openssl-dev
+}
+
+configurePhase() {
+	cd src
+	libtoolize -c
+	autoreconf -i
+	./configure
+}
+
+fixupPhase() {
+	rm -rf out/usr/local/share
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+openssl.tcz
+EOF
+}
+
