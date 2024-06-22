@@ -16,33 +16,33 @@ def ensure_exists(pkg, parent=None):
         sys.exit(1)
 
 
-def rebuilds(pkg, visited, rebuilded, tcver, arch, parent=None):
-    if pkg in rebuilded:
-        return True
-    if pkg in visited:
-        return False
+def rebuilds(pkg, state, tcver, arch, parent=None):
+    if pkg in state:
+        return state[pkg]
     ensure_exists(pkg, parent=parent)
-    visited.add(pkg)
 
     if is_broken(pkg, tcver, arch):
-        return False
-    if needs_rebuild(pkg, tcver, arch):
-        rebuilded.add(pkg)
-        print(pkg)
-        return True
+        state[pkg] = 2
+        return 2
 
+    myret = 0
     reqname = "pkgs/" + pkg + "/DEPENDS"
     if os.path.isfile(reqname):
         with open(reqname, "r") as reqs:
             for dep in reqs.read().splitlines():
                 if len(dep) == 0 or dep[0] == "#":
                     continue
-                if rebuilds(dep, visited, rebuilded, tcver, arch, parent=pkg):
-                    rebuilded.add(pkg)
-                    print(pkg)
-                    return True
+                if ret := rebuilds(dep, state, tcver, arch, parent=pkg):
+                    myret = max(myret, ret)
+                    if ret >= 2:
+                        break
 
-    return False
+    if myret == 0 and needs_rebuild(pkg, tcver, arch):
+        myret = 1
+    if myret == 1:
+        print(pkg)
+    state[pkg] = myret
+    return myret
 
 
 def main():
@@ -52,11 +52,10 @@ def main():
 
     tcver = sys.argv[1]
     arch = sys.argv[2]
-    visited = set()
-    rebuilded = set()
+    state = dict()
 
     for pkg in os.listdir("pkgs"):
-        rebuilds(pkg, visited, rebuilded, tcver, arch)
+        rebuilds(pkg, state, tcver, arch)
     return
 
 
