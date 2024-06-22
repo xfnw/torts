@@ -1,10 +1,10 @@
 pname="libfuse-full"
 version="2.9.9"
 src="git+https://github.com/libfuse/libfuse#d04687923194d906fe5ad82dcd546c9807bf15b6"
-rel=2
+rel=3
 
 downloadPhase() {
-	tce-load -wil compiletc autoconf automake libtool-dev gettext-dev
+	tce-load -wil compiletc automake libtool-dev gettext-dev
 }
 
 patchPhase() {
