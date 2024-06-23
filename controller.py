@@ -7,7 +7,7 @@ from urllib.parse import urlparse, parse_qs
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from requests_toolbelt.multipart.decoder import MultipartDecoder
 
-from getsource import cache_src, expected_rel
+from getsource import cache_src, expected_rel, get_relpath
 
 NAMEPATTERN = re.compile(b'name="([^"]+)"', re.IGNORECASE)
 
@@ -50,8 +50,8 @@ class Handler(BaseHTTPRequestHandler):
 
         prefix = f"result/{ver}.x/{arch}/tcz/"
         os.makedirs(prefix, exist_ok=True)
-        with open(f"{prefix}{self.package}.tcz.rel", "wb") as f:
-            f.write(expected_rel(self.package))
+        with open(get_relpath(self.package, ver, arch), "wb") as f:
+            f.write(expected_rel(self.package, ver, arch))
 
         if "broken" in query:
             self._ok(b"package broken\n")

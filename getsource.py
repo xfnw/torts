@@ -52,6 +52,10 @@ class Fetchers:
         shutil.rmtree(f"{target}/.git", ignore_errors=True)
 
 
+def get_relpath(pkg, tcver, arch):
+    return f"result/{tcver}.x/{arch}/tcz/{pkg}.tcz.build"
+
+
 def get_depends(pkg):
     reqname = "pkgs/" + pkg + "/DEPENDS"
     if os.path.isfile(reqname):
@@ -96,19 +100,29 @@ def cache_src(pkg, no_fetch=False):
     return fullpath
 
 
-def expected_rel(pkg):
+def expected_rel(pkg, tcver, arch):
     uri = get_tinybuild_var(pkg, "src")
     if uri is None:
         hash = "0" * 32
     else:
         hash = hash_src(uri)
     rel = get_tinybuild_var(pkg, "rel") or 0
-    return f"{hash}-{rel}\n".encode("utf-8")
+    out = f"{hash}-{rel}\n".encode("utf-8")
+    for dep in get_depends(pkg):
+        if len(dep) == 0 or dep[0] == "#":
+            continue
+        deppath = get_relpath(dep, tcver, arch)
+        if not os.path.isfile(deppath):
+            out += b"missing dependency?\n"
+            continue
+        with open(deppath, "rb") as f:
+            out += f.read()
+    return out
 
 
 def needs_rebuild(pkg, tcver, arch):
-    expect = expected_rel(pkg)
-    relpath = f"result/{tcver}.x/{arch}/tcz/{pkg}.tcz.rel"
+    expect = expected_rel(pkg, tcver, arch)
+    relpath = get_relpath(pkg, tcver, arch)
     if not os.path.isfile(relpath):
         return True
     with open(relpath, "rb") as f:
