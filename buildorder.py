@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os, sys
-from getsource import needs_rebuild, is_broken
+from getsource import needs_rebuild, is_broken, get_depends
 
 
 def eprint(*yip, **yap):
@@ -26,16 +26,13 @@ def rebuilds(pkg, state, tcver, arch, parent=None):
         return 2
 
     myret = 0
-    reqname = "pkgs/" + pkg + "/DEPENDS"
-    if os.path.isfile(reqname):
-        with open(reqname, "r") as reqs:
-            for dep in reqs.read().splitlines():
-                if len(dep) == 0 or dep[0] == "#":
-                    continue
-                if ret := rebuilds(dep, state, tcver, arch, parent=pkg):
-                    myret = max(myret, ret)
-                    if ret >= 2:
-                        break
+    for dep in get_depends(pkg):
+        if len(dep) == 0 or dep[0] == "#":
+            continue
+        if ret := rebuilds(dep, state, tcver, arch, parent=pkg):
+            myret = max(myret, ret)
+            if ret >= 2:
+                break
 
     if myret == 0 and needs_rebuild(pkg, tcver, arch):
         myret = 1

@@ -52,6 +52,14 @@ class Fetchers:
         shutil.rmtree(f"{target}/.git", ignore_errors=True)
 
 
+def get_depends(pkg):
+    reqname = "pkgs/" + pkg + "/DEPENDS"
+    if os.path.isfile(reqname):
+        with open(reqname, "r") as reqs:
+            return reqs.read().splitlines()
+    return []
+
+
 def get_tinybuild_var(pkg, var):
     var += "="
     val = None
