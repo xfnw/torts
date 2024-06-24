@@ -1,0 +1,17 @@
+pname="curlftpfs"
+version="0.9.2-unstable-2023-03-05"
+src="git+https://github.com/JackSlateur/curlftpfs#916a808f1e68cacc225d760dff5a43a3f0a3cd00"
+
+downloadPhase() {
+	tce-load -wil compiletc curl-dev glib2-dev libbsd-dev libfuse-dev
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+curl.tcz
+glib2.tcz
+libbsd.tcz
+libfuse.tcz
+EOF
+}
+
