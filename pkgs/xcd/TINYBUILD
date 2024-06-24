@@ -1,0 +1,25 @@
+pname="xcd"
+version="1.2"
+src="git+https://git.sr.ht/~breadbox/xcd#7f48d50c93758d39bdf7d6070eb6c60d1e33f940"
+
+downloadPhase() {
+	tce-load -wil compiletc ncursesw-dev
+}
+
+buildPhase() {
+	make -C src \
+		CFLAGS="-Wall -Wextra -O2 -I/usr/local/include/ncursesw" \
+		LOADLIBES="-lncursesw"
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+	install src/xcd out/usr/local/bin
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+ncursesw.tcz
+EOF
+}
+
