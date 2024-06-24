@@ -1,0 +1,19 @@
+pname="libretls"
+
+downloadPhase() {
+	tce-load -wil libretls-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	mkdir -p out/usr/local/lib
+	cp /tmp/tcloop/libretls-full/usr/local/lib/*.so* out/usr/local/lib
+}
+
+fixupPhase() {
+	: skip
+}
+
