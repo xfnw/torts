@@ -3,7 +3,7 @@ version="2.2a"
 src="git+https://git.causal.agency/catgirl#492b7f7b9406b8e460c4a64aed45c70a8a8e152d"
 
 downloadPhase() {
-	tce-load -wil compiletc ncursesw-dev openssl-dev libretls-full
+	tce-load -wil compiletc ncursesw-dev openssl-dev libretls-dev
 }
 
 buildPhase() {
