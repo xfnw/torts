@@ -1,6 +1,6 @@
 pname="xcd"
 version="1.2"
-src="git+https://git.sr.ht/~breadbox/xcd#7f48d50c93758d39bdf7d6070eb6c60d1e33f940"
+src="tarball+https://www.muppetlabs.com/~breadbox/pub/software/xcd-1.2.tar.gz#9b7ac1c9bc1c34ab70937643b4b5ff532b57e9d96656481a9045e2bf99c7f335"
 
 downloadPhase() {
 	tce-load -wil compiletc ncursesw-dev
