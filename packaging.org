@@ -29,8 +29,6 @@ on the directory name, /not/ this variable. this is mostly used by the
 default phases.
 
 *** version
-this variable is required.
-
 what it says on the tin.
 
 *** src
