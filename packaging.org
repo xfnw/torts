@@ -103,12 +103,16 @@ directory
 create metadata such as the ~tcz.dep~ and ~tcz.info~ files
 
 *** submitPhase
-final checks and submitting the package
+final checks
 
-defaults to running [[https://github.com/tinycorelinux/submitqc][submitqc]] on ~$pname.tcz~ and then uploading
-~$pname.tcz~ and ~$pname.tcz.md5.txt~ (plus ~$pname.tcz.dep~,
-~$pname.tcz.info~, ~$pname.tcz.list~, and/or ~$pname.tcz.zsync~ if
-they exist) to the controller server.
+defaults to running [[https://github.com/tinycorelinux/submitqc][submitqc]] on ~$pname.tcz~
+
+*** uploadPhase
+send files back to controller
+
+defaults to uploading ~$pname.tcz~ and ~$pname.tcz.md5.txt~ (plus
+~$pname.tcz.dep~, ~$pname.tcz.info~, ~$pname.tcz.list~, and/or
+~$pname.tcz.zsync~ if they exist) to the controller server.
 
 * DEPENDS file
 a list of /in-tree/ packages that must be built before the current
