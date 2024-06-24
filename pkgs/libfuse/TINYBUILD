@@ -1,4 +1,5 @@
 pname="libfuse"
+rel=1
 
 downloadPhase() {
 	tce-load -wil libfuse-full
@@ -21,7 +22,6 @@ fixupPhase() {
 udevadm control --reload-rules
 udevadm trigger
 EOF
-	chmod 755 "out/usr/local/tce.installed/$pname"
 
 	sudo chown -R root:root out
 	sudo chmod u+s out/usr/local/bin/fusermount
