@@ -1,0 +1,28 @@
+pname="libfuse-dev"
+
+downloadPhase() {
+	tce-load -wil libfuse-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	mkdir -p out/usr/local
+	cp -r \
+		/tmp/tcloop/libfuse-full/usr/local/lib \
+		/tmp/tcloop/libfuse-full/usr/local/include \
+		out/usr/local
+}
+
+fixupPhase() {
+	rm out/usr/local/lib/*.so*
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+libfuse.tcz
+EOF
+}
+
