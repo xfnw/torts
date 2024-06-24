@@ -61,7 +61,9 @@ metadataPhase() {
 submitPhase() {
 	tce-load -wil submitqc
 	submitqc -c --libs --fix --strip "$pname.tcz"
+}
 
+uploadPhase() {
 	dep= info= list= zsync=
 	[ -e "$pname.tcz.dep" ] && dep="-Fdep=@$pname.tcz.dep"
 	[ -e "$pname.tcz.info" ] && info="-Finfo=@$pname.tcz.info"
@@ -92,5 +94,6 @@ __tinyports() {
 	(packagePhase)
 	(metadataPhase)
 	(submitPhase)
+	(uploadPhase)
 }
 
