@@ -80,7 +80,7 @@ __broken(){
 }
 
 __tinyports() {
-	: "building $pname v$version"
+	: "building $pname"
 	mkdir out
 	(downloadPhase)
 	(patchPhase)
