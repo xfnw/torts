@@ -131,3 +131,8 @@ itself is not kept.
 since this fetches a specific commit, which requires special server
 support, this will not work in all cases. specifically, downloading
 from repositories using the "dumb" http protocol is unsupported.
+
+** tarball
+a scheme of ~tarball+http~, or ~tarball+https~ will download a
+tarball, check that its sha256 hash matches the one specified in the
+uri fragment, and then extracts it without the top level directory.
