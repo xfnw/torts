@@ -1,0 +1,24 @@
+pname="libretls-dev"
+
+downloadPhase() {
+	tce-load -wil libretls-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	cp -r /tmp/tcloop/libretls-full/. out
+}
+
+fixupPhase() {
+	rm out/usr/local/lib/*.so*
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+libretls.tcz
+EOF
+}
+
