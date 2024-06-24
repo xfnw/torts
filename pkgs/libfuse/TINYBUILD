@@ -1,0 +1,35 @@
+pname="libfuse"
+
+downloadPhase() {
+	tce-load -wil libfuse-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	cp -r /tmp/tcloop/libfuse-full/. out
+}
+
+fixupPhase() {
+	rm out/usr/local/lib/*.a out/usr/local/lib/*.la
+	rm -r out/usr/local/share
+
+	mkdir -p out/usr/local/tce.installed
+	cat > "out/usr/local/tce.installed/$pname" <<EOF
+udevadm control --reload-rules
+udevadm trigger
+EOF
+	chmod 755 "out/usr/local/tce.installed/$pname"
+
+	sudo chown -R root:root out
+	sudo chmod u+s out/usr/local/bin/fusermount
+}
+
+submitPhase() {
+	# submitqc "fixing" includes wiping our setuid
+	tce-load -wil submitqc
+	submitqc -c --libs --strip --no-fix "$pname.tcz"
+}
+
