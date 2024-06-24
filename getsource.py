@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import shlex, shutil, os
-from hashlib import md5
+from hashlib import md5, file_digest
 from subprocess import run
 from tempfile import mkdtemp
 from urllib.parse import urlparse
@@ -13,6 +13,8 @@ class Fetchers:
             "git+https": self.fetch_git_https,
             "git+http": self.fetch_git_http,
             "git": self.fetch_git,
+            "tarball+https": self.fetch_tarball_https,
+            "tarball+http": self.fetch_tarball_http,
         }
 
     def fetch(self, url, target, name):
@@ -50,6 +52,26 @@ class Fetchers:
         run(["git", "-C", target, "checkout", "build"], check=True)
 
         shutil.rmtree(f"{target}/.git", ignore_errors=True)
+
+    def fetch_tarball_http(self, url, target):
+        self.fetch_tarball_https(url, target, scheme="http")
+
+    def fetch_tarball_https(self, url, target, scheme="https"):
+        ballpath = target + ".tar"
+        hash = url.fragment
+        if len(hash) < 64:
+            raise Exception("sha256 required")
+        url = url._replace(scheme=scheme, fragment="").geturl()
+
+        run(["wget", "-O", ballpath, "--", url], check=True)
+
+        with open(ballpath, "rb") as f:
+            if (ohash := file_digest(f, "sha256").hexdigest()) != hash:
+                raise Exception(f"hash mismatch: got {ohash} wanted {hash}")
+
+        run(["tar", "xaf", ballpath, "-C", target, "--strip-components=1"], check=True)
+
+        os.remove(ballpath)
 
 
 def get_relpath(pkg, tcver, arch):
