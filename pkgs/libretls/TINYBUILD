@@ -1,4 +1,5 @@
 pname="libretls"
+rel=1
 
 downloadPhase() {
 	tce-load -wil libretls-full
@@ -15,5 +16,11 @@ installPhase() {
 
 fixupPhase() {
 	: skip
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+openssl.tcz
+EOF
 }
 

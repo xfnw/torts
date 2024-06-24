@@ -1,6 +1,7 @@
 pname="astreamfs"
 version="1.0.0-unstable-2024-05-02"
 src="git+https://gitlab.com/BylonAkila/astreamfs.git#26b3b833624a8d87103d8879f365c6f5aec9129e"
+rel=1
 
 downloadPhase() {
 	tce-load -wil compiletc curl-dev libfuse-dev
@@ -15,6 +16,5 @@ metadataPhase() {
 	cat > "$pname.tcz.dep" <<EOF
 curl.tcz
 libfuse.tcz
-gcc_libs.tcz
 EOF
 }
