@@ -1,0 +1,22 @@
+pname="locale-en_US.UTF-8"
+
+downloadPhase() {
+	tce-load -wil glibc_apps glibc_i18n_locale
+}
+
+buildPhase() {
+	sudo mkdir -p /usr/lib/locale
+	sudo localedef -i en_US -c -f UTF-8 en_US.UTF-8
+}
+
+installPhase() {
+	mkdir -p out/usr/lib/locale
+	cp -r /usr/lib/locale/locale-archive out/usr/lib/locale
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+glibc_gconv.tcz
+EOF
+}
+
