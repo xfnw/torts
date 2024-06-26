@@ -1,0 +1,23 @@
+pname="sl"
+version="5.05-unstable-2022-08-29"
+src="git+https://github.com/eyJhb/sl#e419525050ef3fa684c62cf98b89d29cc2adf84d"
+
+downloadPhase() {
+	tce-load -wil compiletc ncursesw-dev
+}
+
+patchPhase() {
+	sed -i 's.-lncurses.&w -I/usr/local/include/ncursesw.' src/Makefile
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+	install src/sl out/usr/local/bin
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+ncursesw.tcz
+EOF
+}
+
