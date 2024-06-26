@@ -1,0 +1,13 @@
+pname="coot"
+version="r42.cba2b6a"
+src="git+https://github.com/xfnw/coot#cba2b6ad3bb4fd6f0bf498f32045e17b25f0a5f4"
+
+downloadPhase() {
+	tce-load -wil compiletc
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+	make -C src install DESTDIR="$PWD/out"
+}
+
