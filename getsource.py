@@ -162,7 +162,9 @@ def is_broken(pkg, tcver, arch):
         if len(brok) > 1:
             lo, sep, hi = brok.partition("..")
             if sep:
-                if (not lo or tcver >= int(lo)) and (not hi or tcver < int(hi)):
+                if hi:
+                    hi = int(hi[1:]) + 1 if hi[0] == "=" else int(hi)
+                if (not lo or tcver >= int(lo)) and (not hi or tcver < hi):
                     return True
                 continue
         if brok.isdigit() and tcver == int(brok) or arch == brok:
