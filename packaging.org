@@ -42,8 +42,9 @@ at locations with changing content. when its value is changed, a
 rebuild will be triggered.
 
 *** broken
-a space-delimited list of major tinycore versions this package should
-not be built on.
+a space-delimited list of major tinycore versions, [[https://doc.rust-lang.org/reference/expressions/range-expr.html][rust-style ranges]]
+of major tinycore versions, and architectures this package should not
+be built on.
 
 *** rel
 may be incremented to trigger a rebuild without changing the value of
