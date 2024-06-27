@@ -3,8 +3,8 @@ version="3.8.1"
 src="git+https://git.causal.agency/libretls#198349012002f8d30013eb23c7d6df6a3c9cc65a"
 
 # openssl is too old on tc 10
-# no idea why openssl seemingly is just not packaged in tc 11 12 and 13?
-broken="10 11 12 13"
+# tc was messing with its openssl naming scheme in 11 through 13
+broken="..=13"
 
 downloadPhase() {
 	tce-load -wil compiletc automake libtool-dev openssl-dev
