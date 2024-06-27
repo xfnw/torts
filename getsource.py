@@ -91,7 +91,7 @@ def get_tinybuild_var(pkg, var):
     val = None
     with open(f"pkgs/{pkg}/TINYBUILD", "r") as f:
 
-        for part in shlex.split(f.read()):
+        for part in shlex.split(f.read(), comments=True):
             if part.startswith(var):
                 val = part.split("=", 1)[1]
                 break
