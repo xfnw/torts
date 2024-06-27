@@ -153,8 +153,19 @@ def needs_rebuild(pkg, tcver, arch):
     return False
 
 
-def is_broken(pkg, tcver, _arch):
+def is_broken(pkg, tcver, arch):
     broken = get_tinybuild_var(pkg, "broken")
     if broken is None:
         return False
-    return tcver in broken.split()
+
+    for brok in broken.split():
+        if len(brok) > 1:
+            lo, sep, hi = brok.partition("..")
+            if sep:
+                if (not lo or tcver >= int(lo)) and (not hi or tcver < int(hi)):
+                    return True
+                continue
+        if brok.isdigit() and tcver == int(brok) or arch == brok:
+            return True
+
+    return False

@@ -47,7 +47,7 @@ def main():
         print("usage: tcver arch")
         return
 
-    tcver = sys.argv[1]
+    tcver = int(sys.argv[1])
     arch = sys.argv[2]
     state = dict()
 
