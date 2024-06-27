@@ -3,7 +3,9 @@ version="1.1.0"
 src="git+https://github.com/xfnw/irccrab#0f77322cab1222f4c9f76cff8584f624d63ca6f5"
 
 # rust is not packaged for tc 10
-broken="10"
+# before tc 15: cargo needs openssl-1.1.1 for some reason, full
+# crates.io index download takes forever, and missing some crates
+broken="..15"
 
 downloadPhase() {
 	tce-load -wil compiletc rust
