@@ -41,16 +41,38 @@ sources are addressed based on a hash of this value, so avoid pointing
 at locations with changing content. when its value is changed, a
 rebuild will be triggered.
 
+for example, a package with
+#+begin_example
+src="git+https://github.com/eyJhb/sl#e419525050ef3fa684c62cf98b89d29cc2adf84d"
+#+end_example
+will fetch the commit ~e419525050ef3fa684c62cf98b89d29cc2adf84d~ from
+the git repository ~https://github.com/eyJhb/sl~.
+
 *** broken
 a space-delimited list of major tinycore versions, [[https://doc.rust-lang.org/reference/expressions/range-expr.html][rust-style ranges]]
 of major tinycore versions, and architectures this package should not
 be built on.
+
+for example, a package with
+#+begin_example
+broken="..=3 10 12..15 20.. x86"
+#+end_example
+will not be built if the tinycore version is less than or equal to 3,
+if the tinycore version is equal to 10, if the tinycore version is
+greater than or equal to 12 but less than 15, if the tinycore version
+is greater than or equal to 20, or if the architecture is x86.
 
 *** rel
 may be incremented to trigger a rebuild without changing the value of
 [[*src][src]]. when the value of src changes, this should be reset or removed.
 
 where left unspecified, equivalent to a value of ~0~.
+
+for example, a package with
+#+begin_example
+rel=1
+#+end_example
+will be rebuilt if it was previously built with a different rel value.
 
 ** phases
 overridable shell functions for different build steps. some have
