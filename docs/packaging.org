@@ -1,0 +1,161 @@
+#+TITLE: packaging guide
+#+OPTIONS: toc:nil
+
+this is all subject to change. torts is in its early stages and makes
+no stability guarantees. keep things in-tree if you do not want them
+to get broken.
+
+all the things are optional unless otherwise noted.
+
+#+TOC: headlines 3
+
+* TINYBUILD file
+this file is required.
+
+a shell script with build information.
+
+located at ~pkgs/{packagename}/TINYBUILD~
+
+** variables
+these variables are often parsed without evaluation as a shell script,
+only use literal values in these variables.
+
+*** pname
+this variable is required.
+
+the package name while inside build environment. note that the names
+of the resulting package as decided by the controller server depends
+on the directory name, /not/ this variable. this is mostly used by the
+default phases.
+
+*** version
+what it says on the tin.
+
+*** src
+a [[*fetchers][fetcher]] uri
+
+any downloaded content will be made available in the ~src~ directory
+when building.
+
+sources are addressed based on a hash of this value, so avoid pointing
+at locations with changing content. when its value is changed, a
+rebuild will be triggered.
+
+for example, a package with
+#+begin_example
+src="git+https://github.com/eyJhb/sl#e419525050ef3fa684c62cf98b89d29cc2adf84d"
+#+end_example
+will fetch the commit ~e419525050ef3fa684c62cf98b89d29cc2adf84d~ from
+the git repository ~https://github.com/eyJhb/sl~.
+
+*** broken
+a space-delimited list of major tinycore versions, [[https://doc.rust-lang.org/reference/expressions/range-expr.html][rust-style ranges]]
+of major tinycore versions, and architectures this package should not
+be built on.
+
+for example, a package with
+#+begin_example
+broken="..=3 10 12..15 20.. x86"
+#+end_example
+will not be built if the tinycore version is less than or equal to 3,
+if the tinycore version is equal to 10, if the tinycore version is
+greater than or equal to 12 but less than 15, if the tinycore version
+is greater than or equal to 20, or if the architecture is x86.
+
+*** rel
+may be incremented to trigger a rebuild without changing the value of
+[[*src][src]]. when the value of src changes, this should be reset or removed.
+
+where left unspecified, equivalent to a value of ~0~.
+
+for example, a package with
+#+begin_example
+rel=1
+#+end_example
+will be rebuilt if it was previously built with a different rel value.
+
+** phases
+overridable shell functions for different build steps. some have
+defaults for common packaging tasks.
+
+each phase is run inside a new subshell, so changing directories will
+not mess with other phases.
+
+*** downloadPhase
+load any dependencies, and (if you must) download any sources that
+could not be fetched via [[*src][src]].
+
+*** patchPhase
+apply any patches
+
+*** configurePhase
+setup the build configuration
+
+defaults to running ~configure~ if it exists
+
+*** buildPhase
+compile the package
+
+defaults to running ~make~
+
+*** checkPhase
+verify functionality with tests
+
+*** installPhase
+install package contents to ~out~
+
+defaults to running ~make install~ with a ~DESTDIR~ pointing to ~out~
+
+*** fixupPhase
+cleaning up after install
+
+defaults to recursively running ~sstrip -z~ on every file marked
+executable in ~out~.
+
+note that this default will break dynamically linked libraries,
+causing strange issues such as =file in wrong format= linker
+errors. you'll likely want to override this if packaging a library.
+
+*** packagePhase
+create the tcz itself
+
+defaults to creating ~$pname.tcz~ from the contents of the ~out~
+directory
+
+*** metadataPhase
+create metadata such as the ~tcz.dep~ and ~tcz.info~ files
+
+*** submitPhase
+final checks
+
+defaults to running [[https://github.com/tinycorelinux/submitqc][submitqc]] on ~$pname.tcz~
+
+*** uploadPhase
+send files back to controller
+
+defaults to uploading ~$pname.tcz~ and ~$pname.tcz.md5.txt~ (plus
+~$pname.tcz.dep~, ~$pname.tcz.info~, ~$pname.tcz.list~, and/or
+~$pname.tcz.zsync~ if they exist) to the controller server.
+
+* DEPENDS file
+a list of /in-tree/ packages that must be built before the current
+one. blank lines are ignored and lines beginning with ~#~ are
+comments.
+
+located at ~pkgs/{packagename}/DEPENDS~
+
+* fetchers
+
+** git
+a scheme of ~git~, ~git+http~, or ~git+https~ will attempt a shallow
+clone of the commit hash specified in the uri fragment. the repository
+itself is not kept.
+
+since this fetches a specific commit, which requires special server
+support, this will not work in all cases. specifically, downloading
+from repositories using the "dumb" http protocol is unsupported.
+
+** tarball
+a scheme of ~tarball+http~, or ~tarball+https~ will download a
+tarball, check that its sha256 hash matches the one specified in the
+uri fragment, and then extracts it without the top level directory.
