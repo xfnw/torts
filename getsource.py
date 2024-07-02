@@ -50,6 +50,7 @@ class Fetchers:
             check=True,
         )
         run(["git", "-C", target, "checkout", "build"], check=True)
+        run(["git", "-C", target, "submodule", "update", "--init", "--depth=1"], check=True)
 
         shutil.rmtree(f"{target}/.git", ignore_errors=True)
 
