@@ -1,0 +1,23 @@
+pname="curlftpfs-ng"
+version="0.9.3-unstable-2020-09-05"
+src="git+https://github.com/ikn/curlftpfs-ng#12c72da670e08362dab6ea3625c2b08e52550b1b"
+
+downloadPhase() {
+	tce-load -wil compiletc automake libtool-dev gettext-dev curl-dev glib2-dev libbsd-dev libfuse-dev
+}
+
+configurePhase() {
+	cd src
+	autoreconf -i
+	./configure
+}
+
+metadataPhase() {
+	cat > "$pname.tcz.dep" <<EOF
+curl.tcz
+glib2.tcz
+libbsd.tcz
+libfuse.tcz
+EOF
+}
+
