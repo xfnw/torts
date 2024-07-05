@@ -48,14 +48,12 @@ class Handler(BaseHTTPRequestHandler):
         ver = query["ver"][0]
         arch = query["arch"][0]
 
-        prefix = f"result/{ver}.x/{arch}/tcz/"
-        os.makedirs(prefix, exist_ok=True)
-        with open(get_relpath(self.package, ver, arch), "wb") as f:
-            f.write(expected_rel(self.package, ver, arch))
-
         if "broken" in query:
             self._ok(b"package broken\n")
             return
+
+        prefix = f"result/{ver}.x/{arch}/tcz/"
+        os.makedirs(prefix, exist_ok=True)
 
         contenttype = self.headers.get("Content-Type")
         length = int(self.headers.get("Content-Length"))
@@ -87,6 +85,9 @@ class Handler(BaseHTTPRequestHandler):
                 f.write(part.content)
 
             print("got", filename)
+
+        with open(get_relpath(self.package, ver, arch), "wb") as f:
+            f.write(expected_rel(self.package, ver, arch))
 
         self._ok(b"nyaa~\n")
 
