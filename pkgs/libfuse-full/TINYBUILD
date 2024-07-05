@@ -1,22 +1,15 @@
 pname="libfuse-full"
-version="2.9.9"
-src="git+https://github.com/libfuse/libfuse#d04687923194d906fe5ad82dcd546c9807bf15b6"
-rel=3
+version="2.9.9-unstable-2021-07-24"
+src="git+https://github.com/libfuse/libfuse#5a43d0f724c56f8836f3f92411e0de1b5f82db32"
 
 downloadPhase() {
 	tce-load -wil compiletc automake libtool-dev gettext-dev
 }
 
-patchPhase() {
-	cd src
-	patch -p1 <../fuse-2.9.9-closefrom-glibc-2-34.patch
-}
-
 configurePhase() {
 	cd src
 
-	# fails on first invocation sometimes?
-	./makeconf.sh || ./makeconf.sh
+	./makeconf.sh
 
 	./configure
 }
