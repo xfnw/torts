@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import shlex, shutil, os
+import shlex, shutil, os, re
 from hashlib import md5, file_digest
 from subprocess import run
 from tempfile import mkdtemp
@@ -50,7 +50,10 @@ class Fetchers:
             check=True,
         )
         run(["git", "-C", target, "checkout", "build"], check=True)
-        run(["git", "-C", target, "submodule", "update", "--init", "--depth=1"], check=True)
+        run(
+            ["git", "-C", target, "submodule", "update", "--init", "--depth=1"],
+            check=True,
+        )
 
         shutil.rmtree(f"{target}/.git", ignore_errors=True)
 
@@ -172,3 +175,31 @@ def is_broken(pkg, tcver, arch):
             return True
 
     return False
+
+
+def format_changelog(pkg):
+    log = run(
+        [
+            "git",
+            "log",
+            "--reverse",
+            "--date=format:%Y/%m/%d",
+            "--pretty=format:%ad %s (%an)",
+            "--",
+            f"pkgs/{pkg}",
+        ],
+        check=True,
+        capture_output=True,
+    )
+    if len(log.stdout) == 0:
+        return None
+    pat = re.compile(f"^([^ ]+ ){re.escape(pkg)}: ")
+    changelog = []
+    for line in log.stdout.decode("utf-8").splitlines():
+        changelog.append(pat.sub("\\1", line))
+    if len(changelog) == 1:
+        changelog.insert(0, "----")
+    out = f"Change-log:     {changelog[0]}\n"
+    for line in changelog[1:-1]:
+        out += f"                {line}\n"
+    return out + f"Current:        {changelog[-1]}\n"

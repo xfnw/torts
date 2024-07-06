@@ -7,7 +7,7 @@ from urllib.parse import urlparse, parse_qs
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from requests_toolbelt.multipart.decoder import MultipartDecoder
 
-from getsource import cache_src, expected_rel, get_relpath
+from getsource import cache_src, expected_rel, get_relpath, format_changelog
 
 NAMEPATTERN = re.compile(b'name="([^"]+)"', re.IGNORECASE)
 
@@ -101,6 +101,11 @@ def create_script(package):
         t.add("pkgs/" + package, arcname=".")
         if srcpath := cache_src(package):
             t.add(srcpath, arcname="src")
+        if changelog := format_changelog(package):
+            changelog = changelog.encode("utf-8")
+            info = tarfile.TarInfo(name="changelog")
+            info.size = len(changelog)
+            t.addfile(info, io.BytesIO(changelog))
 
     scrlen = script.count(b"\n") + 6
     tail = f"""
