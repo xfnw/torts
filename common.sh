@@ -4,6 +4,8 @@
 
 MAJORVER="$(getMajorVer)"
 ARCH="$(getBuild)"
+read MIRROR < /opt/tcemirror
+MIRROR="${MIRROR%/}/$MAJORVER.x/$ARCH/tcz"
 
 for arg in $(cat /proc/cmdline); do
 	case "$arg" in
@@ -76,7 +78,11 @@ uploadPhase() {
 		"$SCRIPT?ver=$MAJORVER&arch=$ARCH"
 }
 
-__broken(){
+copyinfo() {
+	wget -O "$pname.tcz.info" "$MIRROR/$1.tcz.info"
+}
+
+__broken() {
 	tce-load -wil curl
 	curl -X POST "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=$1"
 }
