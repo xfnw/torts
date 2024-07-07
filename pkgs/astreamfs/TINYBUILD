@@ -1,7 +1,6 @@
 pname="astreamfs"
-version="1.0.0-unstable-2024-05-02"
-src="git+https://gitlab.com/BylonAkila/astreamfs.git#26b3b833624a8d87103d8879f365c6f5aec9129e"
-rel=1
+version="1.0.0-unstable-2024-06-29"
+src="git+https://gitlab.com/BylonAkila/astreamfs.git#08a90df69c47562ea4962f49d72f4edbfcc4fdd5"
 
 downloadPhase() {
 	tce-load -wil compiletc curl-dev libfuse-dev
@@ -13,6 +12,18 @@ installPhase() {
 }
 
 metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A fuse filesystem to read http(s) URLs
+Version:        $version
+Author:         Bylon Akila
+Original-site:  https://gitlab.com/BylonAkila/astreamfs
+Copying-policy: GPL-3.0-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           fuse filesystem http
+Comments:       ----
+EOF
 	cat > "$pname.tcz.dep" <<EOF
 curl.tcz
 libfuse.tcz
