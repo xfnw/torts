@@ -1,7 +1,7 @@
 pname="libfuse-full"
 version="2.9.9-unstable-2021-07-24"
 src="git+https://github.com/libfuse/libfuse#5a43d0f724c56f8836f3f92411e0de1b5f82db32"
-rel=1
+rel=2
 
 downloadPhase() {
 	tce-load -wil compiletc automake libtool-dev gettext-dev
@@ -29,11 +29,12 @@ Description:    An interface for filesystems in userspace
 Version:        $version
 Author:         Miklos Szeredi <miklos@szeredi.hu>
 Original-site:  https://github.com/libfuse/libfuse/
-Copying-policy: LGPLv2
+Copying-policy: GPL-2.0-only AND LGPL-2.1-only
 Size:           0
 Extension_by:   xfnw
 Tags:           fuse filesystem
-Comments:       ----
+Comments:       LGPL-2.1-only is for contents of lib and include,
+                while GPL-2.0-only is for everything else
 EOF
 }
 
