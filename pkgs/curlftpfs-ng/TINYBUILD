@@ -1,6 +1,7 @@
 pname="curlftpfs-ng"
 version="0.9.3-unstable-2020-09-05"
 src="git+https://github.com/ikn/curlftpfs-ng#12c72da670e08362dab6ea3625c2b08e52550b1b"
+rel=1
 
 downloadPhase() {
 	tce-load -wil compiletc automake libtool-dev gettext-dev curl-dev glib2-dev libbsd-dev libfuse-dev
@@ -13,6 +14,18 @@ configurePhase() {
 }
 
 metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A filesystem for acessing ftp hosts based on FUSE
+Version:        $version
+Author:         Joseph Lansdowne
+Original-site:  https://github.com/ikn/curlftpfs-ng
+Copying-policy: GPL-2.0-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           fuse filesystem ftp
+Comments:       ----
+EOF
 	cat > "$pname.tcz.dep" <<EOF
 curl.tcz
 glib2.tcz
