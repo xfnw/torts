@@ -184,7 +184,7 @@ def format_changelog(pkg):
             "log",
             "--reverse",
             "--date=format:%Y/%m/%d",
-            "--pretty=format:%ad %s (%an)",
+            "--pretty=format:%ad %s (%aN)",
             "--",
             f"pkgs/{pkg}",
         ],
