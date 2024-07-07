@@ -1,6 +1,7 @@
 pname="libretls-full"
 version="3.8.1"
 src="git+https://git.causal.agency/libretls#198349012002f8d30013eb23c7d6df6a3c9cc65a"
+rel=1
 
 # openssl is too old on tc 10
 # tc was messing with its openssl naming scheme in 11 through 13
@@ -22,6 +23,18 @@ fixupPhase() {
 }
 
 metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A port of libtls from LibreSSL to OpenSSL
+Version:        $version
+Author:         June McEnroe <june@causal.agency>
+Original-site:  https://git.causal.agency/libretls/about/
+Copying-policy: ISC
+Size:           0
+Extension_by:   xfnw
+Tags:           tls libressl openssl
+Comments:       Uses pre-2007 ISC variant from OpenBSD
+EOF
 	cat > "$pname.tcz.dep" <<EOF
 openssl.tcz
 EOF
