@@ -1,5 +1,5 @@
 pname="libfuse"
-rel=1
+rel=2
 
 downloadPhase() {
 	tce-load -wil libfuse-full
@@ -25,6 +25,10 @@ EOF
 
 	sudo chown -R root:root out
 	sudo chmod u+s out/usr/local/bin/fusermount
+}
+
+metadataPhase() {
+	copyinfo libfuse-full
 }
 
 submitPhase() {
