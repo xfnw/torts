@@ -1,4 +1,5 @@
 pname="libfuse-dev"
+rel=1
 
 downloadPhase() {
 	tce-load -wil libfuse-full
@@ -21,6 +22,7 @@ fixupPhase() {
 }
 
 metadataPhase() {
+	copyinfo libfuse-full
 	cat > "$pname.tcz.dep" <<EOF
 libfuse.tcz
 EOF
