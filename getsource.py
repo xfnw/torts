@@ -183,6 +183,7 @@ def format_changelog(pkg):
             "git",
             "log",
             "--reverse",
+            "--no-merges",
             "--date=format:%Y/%m/%d",
             "--pretty=format:%ad %s (%aN)",
             "--",
