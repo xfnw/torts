@@ -32,7 +32,7 @@ default phases.
 what it says on the tin.
 
 *** src
-a [[*fetchers][fetcher]] uri
+a [[*fetchers][fetcher]] url
 
 any downloaded content will be made available in the ~src~ directory
 when building.
@@ -102,7 +102,7 @@ defaults to running ~make~
 verify functionality with tests
 
 *** installPhase
-install package contents to ~out~
+install package contents to [[*out directory][out]]
 
 defaults to running ~make install~ with a ~DESTDIR~ pointing to ~out~
 
@@ -110,7 +110,7 @@ defaults to running ~make install~ with a ~DESTDIR~ pointing to ~out~
 cleaning up after install
 
 defaults to recursively running ~sstrip -z~ on every file marked
-executable in ~out~.
+executable in [[*out directory][out]].
 
 note that this default will break dynamically linked libraries,
 causing strange issues such as =file in wrong format= linker
@@ -119,8 +119,8 @@ errors. you'll likely want to override this if packaging a library.
 *** packagePhase
 create the tcz itself
 
-defaults to creating ~$pname.tcz~ from the contents of the ~out~
-directory
+defaults to creating ~$pname.tcz~ from the contents of the [[*out directory][out
+directory]]
 
 *** metadataPhase
 create metadata such as the ~tcz.dep~ and ~tcz.info~ files
@@ -145,6 +145,7 @@ comments.
 located at ~pkgs/{packagename}/DEPENDS~
 
 * fetchers
+special url used in the [[*src][src variable]] to populate the [[*src directory][src directory]]
 
 ** git
 a scheme of ~git~, ~git+http~, or ~git+https~ will attempt a shallow
@@ -159,3 +160,21 @@ from repositories using the "dumb" http protocol is unsupported.
 a scheme of ~tarball+http~, or ~tarball+https~ will download a
 tarball, check that its sha256 hash matches the one specified in the
 uri fragment, and then extracts it without the top level directory.
+
+* build environment
+builds are started in a temporary directory containing the contents of
+~pkgs/{packagename}/~, and some additional content.
+
+** src directory
+the extracted contents [[*fetchers][fetched]] from the [[*src][src variable]].
+
+this will not exist if the ~src~ variable was not set.
+
+** out directory
+an empty directory whose contents will be used in the default
+[[*packagePhase][packagePhase]].
+
+** changelog file
+a changelog, in the format of the end of a ~tcz.info~ file, will be
+written to a file named ~changelog~. this is created from git history of
+~pkgs/{packagename}/~
