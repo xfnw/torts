@@ -1,6 +1,7 @@
 pname="pngquant"
 version="3.0.3-unstable-2024-06-23"
 src="git+https://github.com/kornelski/pngquant#ed62a8b7720fb784b821766bf8d4a3c2a5f6d568"
+rel=1
 
 # MSRV is 1.70, which is not before tc 15
 broken="..15"
@@ -20,5 +21,20 @@ installPhase() {
 	mkdir -p out/usr/local/bin
 
 	install src/target/release/pngquant out/usr/local/bin
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A utility and library for lossy compression of PNG images
+Version:        $version
+Author:         Kornel Lesiński, Greg Roelofs, Jef Poskanzer
+Original-site:  https://pngquant.org
+Copying-policy: GPL-3.0-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           png image optimizer
+Comments:       ----
+EOF
 }
 
