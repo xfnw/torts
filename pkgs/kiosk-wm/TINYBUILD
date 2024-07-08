@@ -1,6 +1,7 @@
 pname="kiosk-wm"
 version="r6.340c07c"
 src="git+https://github.com/Friz64/kiosk-wm#340c07c6a1345e451e19d269a26b6287f3f60d55"
+rel=1
 
 downloadPhase() {
 	tce-load -wil compiletc libX11-dev
@@ -16,6 +17,19 @@ installPhase() {
 }
 
 metadataPhase() {
+	quot="'" # ugh, shlex does not understand heredoc (#3)
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A fullscreen-only window manager
+Version:        $version
+Author:         Jacob O${quot}Toole, Friz64
+Original-site:  https://github.com/Friz64/kiosk-wm
+Copying-policy: MIT
+Size:           0
+Extension_by:   xfnw
+Tags:           x11 kiosk window manager
+Comments:       Uses Friz64${quot}s fork that handles root window resizes
+EOF
 	echo libX11.tcz > kiosk-wm.tcz.dep
 }
 
