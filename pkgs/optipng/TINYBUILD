@@ -1,8 +1,24 @@
 pname="optipng"
 version="0.7.8"
 src="tarball+https://downloads.sourceforge.net/optipng/optipng-0.7.8.tar.gz#25a3bd68481f21502ccaa0f4c13f84dcf6b20338e4c4e8c51f2cefbd8513398c"
+rel=1
 
 downloadPhase() {
 	tce-load -wil compiletc
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A PNG optimizer that recompresses images without losing information
+Version:        $version
+Author:         Cosmin Truta
+Original-site:  https://optipng.sourceforge.net/
+Copying-policy: Zlib
+Size:           0
+Extension_by:   xfnw
+Tags:           png image optimizer
+Comments:       ----
+EOF
 }
 
