@@ -1,6 +1,7 @@
 pname="sl"
 version="5.05-unstable-2022-08-29"
 src="git+https://github.com/eyJhb/sl#e419525050ef3fa684c62cf98b89d29cc2adf84d"
+rel=1
 
 downloadPhase() {
 	tce-load -wil compiletc ncursesw-dev
@@ -16,6 +17,18 @@ installPhase() {
 }
 
 metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    Steam Locomotive going across your terminal
+Version:        $version
+Author:         Toyoda Masashi, eyJhb
+Original-site:  https://github.com/eyJhb/sl
+Copying-policy: SL
+Size:           0
+Extension_by:   xfnw
+Tags:           steam locomotive train fun
+Comments:       I like trains
+EOF
 	cat > "$pname.tcz.dep" <<EOF
 ncursesw.tcz
 EOF
