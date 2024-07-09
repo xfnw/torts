@@ -1,6 +1,7 @@
 pname="xcd"
 version="1.2"
 src="tarball+https://www.muppetlabs.com/~breadbox/pub/software/xcd-1.2.tar.gz#9b7ac1c9bc1c34ab70937643b4b5ff532b57e9d96656481a9045e2bf99c7f335"
+rel=1
 
 downloadPhase() {
 	tce-load -wil compiletc ncursesw-dev
@@ -18,6 +19,18 @@ installPhase() {
 }
 
 metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A colorized hexdump tool
+Version:        $version
+Author:         Brian Raiter <breadbox@muppetlabs.com>
+Original-site:  https://www.muppetlabs.com/~breadbox/software/xcd.html
+Copying-policy: MIT
+Size:           0
+Extension_by:   xfnw
+Tags:           colorful hexdump
+Comments:       ----
+EOF
 	cat > "$pname.tcz.dep" <<EOF
 ncursesw.tcz
 EOF
