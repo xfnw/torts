@@ -1,6 +1,7 @@
 pname="pridecat"
 version="r48.1eca50c"
 src="git+https://github.com/lunasorcery/pridecat#1eca50ca5b2a9ec2a4ebf52a09c0526a91ccbd6d"
+rel=1
 
 downloadPhase() {
 	tce-load -wil compiletc
@@ -9,5 +10,20 @@ downloadPhase() {
 installPhase() {
 	mkdir -p out/usr/local/bin
 	install src/pridecat out/usr/local/bin
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    Like cat, but more colorful
+Version:        $version
+Author:         lunasorcery
+Original-site:  https://github.com/lunasorcery/pridecat
+Copying-policy: CC-BY-NC-4.0
+Size:           0
+Extension_by:   xfnw
+Tags:           colorful cat pride
+Comments:       ----
+EOF
 }
 
