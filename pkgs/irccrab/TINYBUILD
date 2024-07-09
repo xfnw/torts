@@ -1,6 +1,7 @@
 pname="irccrab"
 version="1.1.0"
 src="git+https://github.com/xfnw/irccrab#0f77322cab1222f4c9f76cff8584f624d63ca6f5"
+rel=1
 
 # rust is not packaged for tc 10
 # before tc 15: cargo needs openssl-1.1.1 for some reason, full
@@ -34,6 +35,18 @@ installPhase() {
 }
 
 metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    IRC ping/ponger similar to ircdog
+Version:        $version
+Author:         xfnw
+Original-site:  https://github.com/xfnw/irccrab
+Copying-policy: MIT
+Size:           0
+Extension_by:   xfnw
+Tags:           irc client
+Comments:       ----
+EOF
 	cat > "$pname.tcz.dep" <<EOF
 ca-certificates.tcz
 EOF
