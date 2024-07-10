@@ -1,12 +1,15 @@
 pname="locale-en_US.UTF-8"
+rel=1
 
 downloadPhase() {
 	tce-load -wil glibc_apps glibc_i18n_locale
 }
 
 buildPhase() {
+	loc="${pname#*-}"
+
 	sudo mkdir -p /usr/lib/locale
-	sudo localedef -i en_US -c -f UTF-8 en_US.UTF-8
+	sudo localedef -i "${loc%.*}" -c -f "${loc##*.}" "$loc"
 }
 
 installPhase() {
@@ -15,6 +18,21 @@ installPhase() {
 }
 
 metadataPhase() {
+	version="$(ldd --version | head -n1)"
+	version="${version##* }"
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    pre-generated locale files for ${pname#*-}
+Version:        ${version%.}
+Author:         glibc locale authors
+Original-site:  https://sourceware.org/glibc/
+Copying-policy: LGPL-2.1-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           locale support
+Comments:       for when using getlocale.tcz is inconvenient,
+                like on diskless systems
+EOF
 	cat > "$pname.tcz.dep" <<EOF
 glibc_gconv.tcz
 EOF
