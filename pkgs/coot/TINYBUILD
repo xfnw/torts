@@ -1,6 +1,6 @@
 pname="coot"
-version="r42.cba2b6a"
-src="git+https://github.com/xfnw/coot#cba2b6ad3bb4fd6f0bf498f32045e17b25f0a5f4"
+version="r44.a69ef09"
+src="git+https://github.com/xfnw/coot#a69ef099234f1d35944bf8e74ba6a2887201e182"
 
 downloadPhase() {
 	tce-load -wil compiletc
@@ -9,5 +9,23 @@ downloadPhase() {
 installPhase() {
 	mkdir -p out/usr/local/bin
 	make -C src install DESTDIR="$PWD/out"
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    Random little c utilities
+Version:        $version
+Author:         xfnw
+Original-site:  https://github.com/xfnw/coot
+Copying-policy: MIT
+Size:           0
+Extension_by:   xfnw
+Tags:           c utility
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+ca-certificates.tcz
+EOF
 }
 
