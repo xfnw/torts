@@ -177,6 +177,18 @@ def is_broken(pkg, tcver, arch):
     return False
 
 
+def eprint(*yip, **yap):
+    print(*yip, file=sys.stderr, **yap)
+
+
+def ensure_exists(pkg, parent=None):
+    if not os.path.isfile("pkgs/" + pkg + "/TINYBUILD"):
+        eprint("missing package", pkg)
+        if parent:
+            eprint("depended on by", parent)
+        sys.exit(1)
+
+
 def format_changelog(pkg):
     log = run(
         [

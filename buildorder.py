@@ -1,19 +1,7 @@
 #!/usr/bin/env python3
 
 import os, sys
-from getsource import needs_rebuild, is_broken, get_depends
-
-
-def eprint(*yip, **yap):
-    print(*yip, file=sys.stderr, **yap)
-
-
-def ensure_exists(pkg, parent=None):
-    if not os.path.isfile("pkgs/" + pkg + "/TINYBUILD"):
-        eprint("missing package", pkg)
-        if parent:
-            eprint("depended on by", parent)
-        sys.exit(1)
+from getsource import needs_rebuild, is_broken, get_depends, ensure_exists
 
 
 def rebuilds(pkg, state, tcver, arch, parent=None):
