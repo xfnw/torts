@@ -1,0 +1,29 @@
+pname="jo"
+src="git+https://github.com/jpmens/jo#2cc476178198774ad6bea89be0b9e4ed2d4bf4c5"
+version="1.9"
+
+downloadPhase() {
+	tce-load -wil compiletc automake
+}
+
+configurePhase() {
+	cd src
+	autoreconf -i
+	./configure
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    JSON output from a shell
+Version:        $version
+Author:         Jan-Piet Mens <jpmens@gmail.com>
+Original-site:  https://github.com/jpmens/jo
+Copying-policy: GPL-2.0-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           json output
+Comments:       ----
+EOF
+}
+
