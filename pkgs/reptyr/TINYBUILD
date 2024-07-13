@@ -1,0 +1,27 @@
+pname="reptyr"
+src="git+https://github.com/nelhage/reptyr#1238097fc2cd15db058d2185cc4985daa87bcd41"
+version="0.10.0"
+
+downloadPhase() {
+	tce-load -wil compiletc
+}
+
+fixupPhase() {
+	rm -r out/etc out/usr/local/share/man
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    Reparent a running program to a new terminal
+Version:        $version
+Author:         Nelson Elhage <nelhage@nelhage.com>
+Original-site:  https://github.com/nelhage/reptyr
+Copying-policy: MIT
+Size:           0
+Extension_by:   xfnw
+Tags:           attach pty reparent
+Comments:       ----
+EOF
+}
+
