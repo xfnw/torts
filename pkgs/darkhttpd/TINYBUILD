@@ -1,0 +1,28 @@
+pname="darkhttpd"
+src="git+https://github.com/emikulic/darkhttpd#f8bf6113c26310243e7aec95e66e6e4e602166d5"
+version="1.16"
+
+downloadPhase() {
+	tce-load -wil compiletc
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+	install src/darkhttpd out/usr/local/bin
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A small and secure static webserver
+Version:        $version
+Author:         Emil Mikulic <emikulic@gmail.com>
+Original-site:  https://unix4lyfe.org/darkhttpd/
+Copying-policy: ISC
+Size:           0
+Extension_by:   xfnw
+Tags:           httpd web server
+Comments:       ----
+EOF
+}
+
