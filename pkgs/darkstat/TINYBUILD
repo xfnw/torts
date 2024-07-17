@@ -1,0 +1,32 @@
+pname="darkstat"
+src="git+https://github.com/emikulic/darkstat#fc231b7b98c256870c2af0b341a8a254501875b7"
+version="3.0.721"
+
+downloadPhase() {
+	tce-load -wil compiletc automake libpcap-dev
+}
+
+configurePhase() {
+	cd src
+	autoreconf -i
+	./configure
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    Gather network statistics
+Version:        $version
+Author:         Emil Mikulic <emikulic@gmail.com>
+Original-site:  https://unix4lyfe.org/darkstat/
+Copying-policy: GPL-2.0-only
+Size:           0
+Extension_by:   xfnw
+Tags:           network statistics packet sniffer
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+libpcap.tcz
+EOF
+}
+
