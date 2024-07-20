@@ -1,5 +1,5 @@
 pname="libfuse"
-rel=2
+rel=3
 
 downloadPhase() {
 	tce-load -wil libfuse-full
@@ -16,12 +16,6 @@ installPhase() {
 fixupPhase() {
 	rm out/usr/local/lib/*.a out/usr/local/lib/*.la
 	rm -r out/usr/local/share
-
-	mkdir -p out/usr/local/tce.installed
-	cat > "out/usr/local/tce.installed/$pname" <<EOF
-udevadm control --reload-rules
-udevadm trigger
-EOF
 
 	sudo chown -R root:root out
 	sudo chmod u+s out/usr/local/bin/fusermount
