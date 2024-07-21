@@ -1,0 +1,33 @@
+pname="ecl-full"
+version="24.5.10"
+src="tarball+https://common-lisp.net/project/ecl/static/files/release/ecl-24.5.10.tgz#e4ea65bb1861e0e495386bfa8bc673bd014e96d3cf9d91e9038f91435cbe622b"
+
+downloadPhase() {
+	tce-load -wil compiletc gc-dev gmp-dev libffi-dev
+}
+
+fixupPhase() {
+	tce-load -wil sstrip
+	find out/usr/local/bin -type f -executable -exec sstrip -z {} \;
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    An embeddable common lisp interpreter
+Version:        $version
+Author:         Daniel Kochmański and Marius Gerbershagen
+Original-site:  https://ecl.common-lisp.dev/
+Copying-policy: LGPL-2.1-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           embeddable common lisp
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+gc-dev.tcz
+gmp-dev.tcz
+libffi-dev.tcz
+EOF
+}
+
