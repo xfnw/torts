@@ -1,0 +1,33 @@
+pname="ecl"
+
+downloadPhase() {
+	tce-load -wil ecl-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	cp -r /tmp/tcloop/ecl-full/. out
+}
+
+fixupPhase() {
+	rm \
+		out/usr/local/lib/*/*.a \
+		out/usr/local/lib/*/*.asd \
+		out/usr/local/lib/*/dpp \
+		out/usr/local/lib/*/ecl_min \
+		out/usr/local/lib/*/build-stamp
+	rm -r out/usr/local/share out/usr/local/include
+}
+
+metadataPhase() {
+	copyinfo ecl-full
+	cat > "$pname.tcz.dep" <<EOF
+gc.tcz
+gmp.tcz
+libffi.tcz
+EOF
+}
+
