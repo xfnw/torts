@@ -1,0 +1,40 @@
+pname="ecl-dev"
+
+downloadPhase() {
+	tce-load -wil ecl-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	mkdir -p out/usr/local/lib
+	cp -r \
+		/tmp/tcloop/ecl-full/usr/local/include \
+		out/usr/local
+	cp -r \
+		/tmp/tcloop/ecl-full/usr/local/lib/*/ \
+		out/usr/local/lib
+}
+
+fixupPhase() {
+	rm \
+		out/usr/local/lib/*/*.fas \
+		out/usr/local/lib/*/COPYING \
+		out/usr/local/lib/*/LICENSE \
+		out/usr/local/lib/*/TAGS \
+		out/usr/local/lib/*/help.doc
+	rm -r out/usr/local/lib/*/encodings
+}
+
+metadataPhase() {
+	copyinfo ecl-full
+	cat > "$pname.tcz.dep" <<EOF
+ecl.tcz
+gc-dev.tcz
+gmp-dev.tcz
+libffi-dev.tcz
+EOF
+}
+
