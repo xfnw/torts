@@ -1,0 +1,26 @@
+pname="ecl-min"
+
+downloadPhase() {
+	tce-load -wil ecl-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+	cp \
+		/tmp/tcloop/ecl-full/usr/local/lib/*/ecl_min \
+		out/usr/local/bin
+}
+
+metadataPhase() {
+	copyinfo ecl-full
+	cat > "$pname.tcz.dep" <<EOF
+gc.tcz
+gmp.tcz
+libffi.tcz
+EOF
+}
+
