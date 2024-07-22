@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import shlex, shutil, os, re
+import shlex, shutil, sys, os, re
 from hashlib import md5, file_digest
 from subprocess import run
 from tempfile import mkdtemp
