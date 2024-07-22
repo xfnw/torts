@@ -1,6 +1,7 @@
 pname="coot"
 version="r44.a69ef09"
 src="git+https://github.com/xfnw/coot#a69ef099234f1d35944bf8e74ba6a2887201e182"
+rel=1
 
 downloadPhase() {
 	tce-load -wil compiletc
@@ -23,9 +24,6 @@ Size:           0
 Extension_by:   xfnw
 Tags:           c utility
 Comments:       ----
-EOF
-	cat > "$pname.tcz.dep" <<EOF
-ca-certificates.tcz
 EOF
 }
 
