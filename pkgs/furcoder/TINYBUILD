@@ -1,0 +1,29 @@
+pname="furcoder"
+version="1.1.9" # 2.0.0 needs a newer FOX version than on tc
+src="tarball+https://download.sourceforge.net/furrycoder/FurCoder-1.1.9/FurCoder-1.1.9.tar.xz#18d953d9db207ea4066f65025e8ae738235400fd5fd2edb1aecc14d07385412f"
+
+# has linking issues with fox before tc 11
+broken="..11"
+
+downloadPhase() {
+	tce-load -wil compiletc fox-dev
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    An encoder and decoder for fur codes
+Version:        $version
+Author:         Joe T. Penrod
+Original-site:  https://sourceforge.net/projects/furrycoder/
+Copying-policy: GPL-2.0-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           furry code fox
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+fox.tcz
+EOF
+}
+
