@@ -1,0 +1,22 @@
+pname="xa"
+version="2.4.1"
+src="tarball+https://www.floodgap.com/retrotech/xa/dists/xa-2.4.1.tar.gz#63c12a6a32a8e364f34f049d8b2477f4656021418f08b8d6b462be0ed3be3ac3"
+
+downloadPhase() {
+	tce-load -wil compiletc
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A cross-assembler for the 6502
+Version:        $version
+Author:         Andre Fachat and Cameron Kaiser
+Original-site:  https://www.floodgap.com/retrotech/xa/
+Copying-policy: GPL-2.0-only
+Size:           0
+Extension_by:   xfnw
+Tags:           6502 cross assembler
+Comments:       ----
+EOF
+}
