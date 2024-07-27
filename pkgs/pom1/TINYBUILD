@@ -1,0 +1,36 @@
+pname="pom1"
+version="1.0.0"
+src="tarball+https://download.sourceforge.net/project/pom1/pom1/1.0.0/pom1-1.0.0.tar.gz#8a1088be1628f593c9d00b0e91d47a3820016d4d2b80a4b047cfedf61b34c9c4"
+
+# SDL is not packaged in tc on x86_64
+broken="x86_64"
+
+downloadPhase() {
+	tce-load -wil compiletc SDL-dev
+}
+
+patchPhase() {
+	cd src
+
+	patch -p1 <../pom1-backspace.patch
+	patch -p1 <../pom1-nomousetheft.patch
+	patch -p1 <../pom1-screen.patch
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    An apple 1 emulator
+Version:        $version
+Author:         anarkavre
+Original-site:  https://pom1.sourceforge.net/
+Copying-policy: GPL-2.0-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           apple1 emulator 6502
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+SDL.tcz
+EOF
+}
