@@ -1,0 +1,44 @@
+pname="libtorrent-rasterbar-full"
+version="2.0.10"
+src="git+https://github.com/arvidn/libtorrent#74bc93a37a5e31c78f0aa02037a68fb9ac5deb41"
+
+# tc was messing with its openssl naming scheme in 11 through 13
+# boost-1.84 is only in tc 15
+broken="..15"
+
+downloadPhase() {
+	tce-load -wil compiletc cmake openssl-dev boost-1.84-dev
+}
+
+buildPhase() {
+	cmake -DCMAKE_BUILD_TYPE=Release -B build src
+	make -C build
+}
+
+installPhase() {
+	make -C build install DESTDIR="$PWD/out"
+}
+
+fixupPhase() {
+	: skip
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A C++ bittorrent library
+Version:        $version
+Author:         Arvid Norberg
+Original-site:  https://libtorrent.org/
+Copying-policy: BSD-2-Clause
+Size:           0
+Extension_by:   xfnw
+Tags:           torrent c++ library
+Comments:       rasterbar version
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+openssl.tcz
+boost-1.84-dev.tcz
+EOF
+}
+
