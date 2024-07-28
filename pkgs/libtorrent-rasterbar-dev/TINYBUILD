@@ -1,0 +1,26 @@
+pname="libtorrent-rasterbar-dev"
+
+downloadPhase() {
+	tce-load -wil libtorrent-rasterbar-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	cp -r /tmp/tcloop/libtorrent-rasterbar-full/. out
+}
+
+fixupPhase() {
+	rm out/usr/local/lib/*.so*
+}
+
+metadataPhase() {
+	copyinfo libtorrent-rasterbar-full
+	cat > "$pname.tcz.dep" <<EOF
+libtorrent-rasterbar.tcz
+boost-1.84-dev.tcz
+EOF
+}
+
