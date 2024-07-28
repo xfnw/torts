@@ -1,0 +1,41 @@
+pname="btfs"
+version="2.24"
+src="git+https://github.com/johang/btfs#38ab708673304f58695e52ac4032a1f2304c790f"
+
+downloadPhase() {
+	tce-load -wil compiletc automake curl-dev libfuse-dev libtorrent-rasterbar-dev
+}
+
+patchPhase() {
+	cd src
+	patch -p1 <../Tilo15-no-prefetch.patch
+}
+
+configurePhase() {
+	cd src
+
+	autoreconf -i
+	./configure
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A bittorrent fuse filesystem
+Version:        $version
+Author:         Johan Gunnarsson <johan.gunnarsson@gmail.com>
+Original-site:  https://github.com/johang/btfs
+Copying-policy: GPL-3.0-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           torrent fuse filesystem
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+curl.tcz
+gcc_libs.tcz
+libfuse.tcz
+libtorrent-rasterbar.tcz
+EOF
+}
+
