@@ -1,0 +1,53 @@
+pname="pbcli"
+version="2.3.1-unstable-2024-04-29"
+src="git+https://github.com/Mydayyy/pbcli#e66875178a2a4e33fbe8435f1fa82bce3232f45f"
+
+# crates.io index downloads takes forever
+broken="..15"
+
+downloadPhase() {
+	tce-load -wil compiletc rust openssl-dev
+}
+
+patchPhase() {
+	cat >>src/Cargo.toml <<EOF
+[profile.smol]
+inherits = "release"
+opt-level = "z"
+panic = "abort"
+strip = true
+lto = true
+EOF
+}
+
+buildPhase() {
+	cd src
+
+	export SSL_CERT_FILE=/usr/local/etc/ssl/certs/ca-certificates.crt
+	cargo build --profile smol
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+
+	install src/target/smol/pbcli out/usr/local/bin
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A command-line client for privatebin
+Version:        $version
+Author:         Mydayyy
+Original-site:  https://github.com/Mydayyy/pbcli
+Copying-policy: Unilicense OR MIT
+Size:           0
+Extension_by:   xfnw
+Tags:           paste client encryption
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+ca-certificates.tcz
+EOF
+}
+
