@@ -10,8 +10,11 @@ downloadPhase() {
 	tce-load -wil compiletc cmake openssl-dev boost-1.84-dev
 }
 
-buildPhase() {
+configurePhase() {
 	cmake -DCMAKE_BUILD_TYPE=Release -B build src
+}
+
+buildPhase() {
 	make -C build
 }
 
