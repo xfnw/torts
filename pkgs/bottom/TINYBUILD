@@ -1,0 +1,50 @@
+pname="bottom"
+version="0.10.1"
+src="git+https://github.com/ClementTsang/bottom#2f102bc1aa7fcd05f40e616c743804295300a490"
+
+# crates.io index downloads take forever
+broken="..15"
+
+downloadPhase() {
+	tce-load -wil compiletc rust
+}
+
+patchPhase() {
+	cat >>src/Cargo.toml <<EOF
+[profile.smol]
+inherits = "release"
+opt-level = "z"
+panic = "abort"
+strip = true
+lto = true
+EOF
+}
+
+buildPhase() {
+	cd src
+
+	export SSL_CERT_FILE=/usr/local/etc/ssl/certs/ca-certificates.crt
+	cargo build --profile smol
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+
+	install src/target/smol/btm out/usr/local/bin
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A system monitor
+Version:        $version
+Author:         Clement Tsang
+Original-site:  https://github.com/ClementTsang/bottom
+Copying-policy: MIT
+Size:           0
+Extension_by:   xfnw
+Tags:           top system
+Comments:       ----
+EOF
+}
+
