@@ -1,0 +1,38 @@
+pname="pup"
+version="0.4.0-unstable-2022-03-06"
+src="git+https://github.com/ericchiang/pup#5a57cf111366c7c08999a34b2afd7ba36d58a96d"
+
+# uses new go module stuff not supported before tc 15
+broken="..15"
+
+downloadPhase() {
+	tce-load -wil go ca-certificates
+}
+
+buildPhase() {
+	cd src
+
+	export SSL_CERT_FILE=/usr/local/etc/ssl/certs/ca-certificates.crt
+	go build -o pup .
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+	install src/pup out/usr/local/bin
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A jq-like tool for processing HTML
+Version:        $version
+Author:         Eric Chiang
+Original-site:  https://github.com/ericchiang/pup
+Copying-policy: MIT
+Size:           0
+Extension_by:   xfnw
+Tags:           cli html
+Comments:       ----
+EOF
+}
+
