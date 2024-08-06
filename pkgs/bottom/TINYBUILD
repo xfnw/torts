@@ -1,6 +1,6 @@
 pname="bottom"
-version="0.10.1"
-src="git+https://github.com/ClementTsang/bottom#2f102bc1aa7fcd05f40e616c743804295300a490"
+version="0.10.2"
+src="git+https://github.com/ClementTsang/bottom#2ec1fb56c9db0b37acc4eca3230adfb52720376b"
 
 # crates.io index downloads take forever
 broken="..15"
