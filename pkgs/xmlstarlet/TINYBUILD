@@ -1,0 +1,26 @@
+pname="xmlstarlet"
+version="1.6.1"
+src="tarball+https://download.sourceforge.net/project/xmlstar/xmlstarlet/1.6.1/xmlstarlet-1.6.1.tar.gz#15d838c4f3375332fd95554619179b69e4ec91418a3a5296e7c631b7ed19e7ca"
+
+downloadPhase() {
+	tce-load -wil compiletc libxslt-dev
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A command line XML toolkit
+Version:        $version
+Author:         Mikhail Grushinskiy
+Original-site:  https://xmlstar.sourceforge.net
+Copying-policy: MIT
+Size:           0
+Extension_by:   xfnw
+Tags:           xml xslt toolkit
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+libxslt.tcz
+EOF
+}
+
