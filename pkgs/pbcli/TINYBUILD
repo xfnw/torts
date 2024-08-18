@@ -1,6 +1,6 @@
 pname="pbcli"
-version="2.3.1-unstable-2024-04-29"
-src="git+https://github.com/Mydayyy/pbcli#e66875178a2a4e33fbe8435f1fa82bce3232f45f"
+version="2.4.0"
+src="git+https://github.com/Mydayyy/pbcli#356fc77ba1d6399b42b39c26c76fceac142a52e6"
 
 # crates.io index downloads takes forever
 broken="..15"
@@ -10,6 +10,7 @@ downloadPhase() {
 }
 
 patchPhase() {
+	sed -i '/^openssl =.*vendored/d' src/Cargo.toml
 	cat >>src/Cargo.toml <<EOF
 [profile.smol]
 inherits = "release"
