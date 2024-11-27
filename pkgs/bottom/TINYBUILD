@@ -6,7 +6,7 @@ src="git+https://github.com/ClementTsang/bottom#2ec1fb56c9db0b37acc4eca3230adfb5
 broken="..15"
 
 downloadPhase() {
-	tce-load -wil compiletc rust
+	tce-load -wil compiletc rust sqlite3
 }
 
 patchPhase() {

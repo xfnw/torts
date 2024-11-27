@@ -7,7 +7,7 @@ rel=1
 broken="..15"
 
 downloadPhase() {
-	tce-load -wil compiletc rust
+	tce-load -wil compiletc rust sqlite3
 }
 
 buildPhase() {

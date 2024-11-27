@@ -6,7 +6,7 @@ src="git+https://github.com/Mydayyy/pbcli#356fc77ba1d6399b42b39c26c76fceac142a52
 broken="..15"
 
 downloadPhase() {
-	tce-load -wil compiletc rust openssl-dev
+	tce-load -wil compiletc rust openssl-dev sqlite3
 }
 
 patchPhase() {
