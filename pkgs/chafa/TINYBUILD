@@ -1,0 +1,28 @@
+pname="chafa"
+version="1.14.5"
+src="tarball+https://hpjansson.org/chafa/releases/chafa-1.14.5.tar.xz#7b5b384d5fb76a641d00af0626ed2115fb255ea371d9bef11f8500286a7b09e5"
+
+# imagemagick was not packaged before tc 11
+broken="..11"
+
+downloadPhase() {
+	tce-load -wil compiletc glib2-dev imagemagick-dev
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    Extensive image to text art converter
+Version:        $version
+Author:         Hans Petter Jansson
+Original-site:  https://hpjansson.org/chafa/
+Copying-policy: LGPL-3.0-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           textmode ansiart image convert
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+imagemagick.tcz
+EOF
+}
