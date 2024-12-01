@@ -1,5 +1,5 @@
 pname="libcaca-full"
-version="v0.99.beta20"
+version="0.99.beta20"
 src="git+https://github.com/cacalabs/libcaca#373c88b9890e67bde91e6acb8f1c442e847d1203"
 
 # requires autoconf 2.71 or above, which was not included before tc 13
