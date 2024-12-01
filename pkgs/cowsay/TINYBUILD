@@ -1,23 +1,13 @@
 pname="cowsay"
-version="3.04"
-src="git+https://github.com/tnalpgge/rank-amateur-cowsay#99058032db7cafbc507a3fbe8cae6be2d9f65ee3"
+version="3.8.4"
+src="git+https://github.com/cowsay-org/cowsay#027c9268ac8571408e153214b9cf1a5e6fab0cfc"
 
 downloadPhase() {
-	tce-load -wil perl5
-}
-
-patchPhase() {
-	cd src
-	patch -p1 <../cowsay-arch-fix.patch
+	tce-load -wil perl5 make
 }
 
 buildPhase() {
 	: skip
-}
-
-installPhase() {
-	cd src
-	echo ../out/usr/local | ./install.sh
 }
 
 metadataPhase() {
@@ -25,8 +15,8 @@ metadataPhase() {
 Title:          $pname.tcz
 Description:    A configurable speaking/thinking cow
 Version:        $version
-Author:         Tony Monroe
-Original-site:  https://web.archive.org/web/20120225123719/http://www.nog.net/~tony/warez/cowsay.shtml
+Author:         Tony Monroe, Andrew Janke
+Original-site:  https://cowsay.diamonds
 Copying-policy: GPL-3.0-only
 Size:           0
 Extension_by:   xfnw
