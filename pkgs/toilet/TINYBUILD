@@ -1,0 +1,31 @@
+pname="toilet"
+version="0.3-unstable-2016-09-27"
+src="git+https://github.com/cacalabs/toilet#3eb9d58037afb0a1baec6dca82caa045fb2217c0"
+
+downloadPhase() {
+	tce-load -wil compiletc automake libcaca-dev
+}
+
+configurePhase() {
+	cd src
+	./bootstrap
+	./configure
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    ANSI art text generation
+Version:        $version
+Author:         Sam Hocevar
+Original-site:  http://caca.zoy.org/wiki/toilet
+Copying-policy: WTFPL
+Size:           0
+Extension_by:   xfnw
+Tags:           textmode ansiart color
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+libcaca-lib.tcz
+EOF
+}
