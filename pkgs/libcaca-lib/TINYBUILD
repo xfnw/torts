@@ -1,0 +1,24 @@
+pname="libcaca-lib"
+
+downloadPhase() {
+	tce-load -wil libcaca-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	mkdir -p out/usr/local/lib
+	cp -r \
+		/tmp/tcloop/libcaca-full/usr/local/lib/*.so* \
+		out/usr/local/lib
+}
+
+fixupPhase() {
+	: skip
+}
+
+metadataPhase() {
+	copyinfo libcaca-full
+}

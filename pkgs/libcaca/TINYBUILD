@@ -1,0 +1,23 @@
+pname="libcaca"
+
+downloadPhase() {
+	tce-load -wil libcaca-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	mkdir -p out/usr/local
+	cp -r \
+		/tmp/tcloop/libcaca-full/usr/local/bin \
+		out/usr/local
+}
+
+metadataPhase() {
+	copyinfo libcaca-full
+	cat > "$pname.tcz.dep" <<EOF
+libcaca-lib.tcz
+EOF
+}
