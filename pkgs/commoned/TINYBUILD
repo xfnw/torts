@@ -1,0 +1,30 @@
+pname="commoned"
+version="0.1.0"
+src="git+https://github.com/xfnw/commoned#4ae0e2beca954d6e1f4ce5da18053dabe8ba57dd"
+
+downloadPhase() {
+	tce-load -wil compiletc ecl-dev
+}
+
+installPhase() {
+	mkdir -p out/usr/local/bin
+	install src/ce out/usr/local/bin
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    commonlisp ed ripoff
+Version:        $version
+Author:         xfnw
+Original-site:  https://github.com/xfnw/commoned
+Copying-policy: GPL-3.0-or-later
+Size:           0
+Extension_by:   xfnw
+Tags:           text editor ed
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+ecl.tcz
+EOF
+}
