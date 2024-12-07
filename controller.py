@@ -99,6 +99,7 @@ def create_script(package):
     archive = io.BytesIO()
     with tarfile.open(fileobj=archive, mode="w:gz") as t:
         t.add("pkgs/" + package, arcname=".")
+        t.add("include")
         if srcpath := cache_src(package):
             t.add(srcpath, arcname="src")
         if changelog := format_changelog(package):
