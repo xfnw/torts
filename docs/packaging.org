@@ -130,13 +130,6 @@ final checks
 
 defaults to running [[https://github.com/tinycorelinux/submitqc][submitqc]] on ~$pname.tcz~
 
-*** uploadPhase
-send files back to controller
-
-defaults to uploading ~$pname.tcz~ and ~$pname.tcz.md5.txt~ (plus
-~$pname.tcz.dep~, ~$pname.tcz.info~, ~$pname.tcz.list~, and/or
-~$pname.tcz.zsync~ if they exist) to the controller server.
-
 * DEPENDS file
 a list of /in-tree/ packages that must be built before the current
 one. blank lines are ignored and lines beginning with ~#~ are

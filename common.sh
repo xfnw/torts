@@ -65,7 +65,24 @@ submitPhase() {
 	submitqc -c --libs --fix --strip "$pname.tcz"
 }
 
-uploadPhase() {
+phases() {
+	(downloadPhase)
+	(patchPhase)
+	(configurePhase)
+	(buildPhase)
+	(checkPhase)
+	(installPhase)
+	(fixupPhase)
+	(packagePhase)
+	(metadataPhase)
+	(submitPhase)
+}
+
+copyinfo() {
+	wget -O "$pname.tcz.info" "$MIRROR/$1.tcz.info"
+}
+
+__upload() {
 	dep= info= list= zsync=
 	[ -e "$pname.tcz.dep" ] && dep="-Fdep=@$pname.tcz.dep"
 	[ -e "$pname.tcz.info" ] && info="-Finfo=@$pname.tcz.info"
@@ -78,10 +95,6 @@ uploadPhase() {
 		"$SCRIPT?ver=$MAJORVER&arch=$ARCH"
 }
 
-copyinfo() {
-	wget -O "$pname.tcz.info" "$MIRROR/$1.tcz.info"
-}
-
 __broken() {
 	tce-load -wil curl
 	curl -X POST "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=$1"
@@ -90,16 +103,7 @@ __broken() {
 __tinyports() {
 	: "building $pname"
 	mkdir out
-	(downloadPhase)
-	(patchPhase)
-	(configurePhase)
-	(buildPhase)
-	(checkPhase)
-	(installPhase)
-	(fixupPhase)
-	(packagePhase)
-	(metadataPhase)
-	(submitPhase)
-	(uploadPhase)
+	phases
+	__upload
 }
 
