@@ -48,10 +48,6 @@ class Handler(BaseHTTPRequestHandler):
         ver = query["ver"][0]
         arch = query["arch"][0]
 
-        if "broken" in query:
-            self._ok(b"package broken\n")
-            return
-
         prefix = f"result/{ver}.x/{arch}/tcz/"
         os.makedirs(prefix, exist_ok=True)
 
@@ -78,6 +74,8 @@ class Handler(BaseHTTPRequestHandler):
                     filename += ".tcz.list"
                 case b"zsync":
                     filename += ".tcz.zsync"
+                case b"log":
+                    filename += ".tcz.log"
                 case _:
                     continue
 
@@ -85,6 +83,10 @@ class Handler(BaseHTTPRequestHandler):
                 f.write(part.content)
 
             print("got", filename)
+
+        if "broken" in query:
+            self._ok(b"package broken\n")
+            return
 
         with open(get_relpath(self.package, ver, arch), "wb") as f:
             f.write(expected_rel(self.package, ver, arch))

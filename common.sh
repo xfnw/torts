@@ -91,19 +91,19 @@ __upload() {
 
 	tce-load -wil curl
 	# XXX: intentionally unquoted
-	curl "-Ftcz=@$pname.tcz" "-Fmd5=@$pname.tcz.md5.txt" $dep $info $list $zsync \
+	curl "-Ftcz=@$pname.tcz" "-Fmd5=@$pname.tcz.md5.txt" $dep $info $list $zsync -Flog=@log \
 		"$SCRIPT?ver=$MAJORVER&arch=$ARCH"
 }
 
 __broken() {
 	tce-load -wil curl
-	curl -X POST "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=$1"
+	curl -X POST -Flog=@log "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=$1"
 }
 
 __tinyports() {
 	: "building $pname"
 	mkdir out
-	phases
+	phases 2>&1 | tee log
 	__upload
 }
 
