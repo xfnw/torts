@@ -1,6 +1,7 @@
 pname="pkgconf"
 version="2.3.0"
 src="git+https://github.com/pkgconf/pkgconf#a88c0d962a987c62d98ede5a738e37ec71005cbd"
+rel=1
 
 downloadPhase() {
 	tce-load -wil compiletc muon-min
@@ -8,6 +9,10 @@ downloadPhase() {
 
 patchPhase() {
 	sed -i "/^subdir('tests')$/d" src/meson.build
+
+	# also add non-local to the search path, since tinycore
+	# packages are inconsistent about which is used
+	sed -i "/default_path +=/{p;s,get_option('prefix'),'/usr',}" src/meson.build
 }
 
 configurePhase() {
