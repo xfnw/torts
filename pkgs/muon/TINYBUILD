@@ -4,7 +4,7 @@ src="tarball+https://muon.build/releases/v0.3.1/muon-v0.3.1.tar.gz#45f6ad728946a
 rel=1
 
 downloadPhase() {
-	tce-load -wil compiletc pkgconf
+	tce-load -wil compiletc muon-bootstrap pkgconf
 }
 
 patchPhase() {
@@ -14,21 +14,15 @@ patchPhase() {
 }
 
 configurePhase() {
-	cd src
-	CC=gcc ./bootstrap.sh ../build
-
-	# XXX: remove me after muon 0.4
-	mv ../build/muon ../build/muon-bootstrap
-
-	../build/muon-bootstrap setup ../build
+	muon -C src setup "$PWD/build"
 }
 
 buildPhase() {
-	./build/muon-bootstrap -C build samu
+	muon -C build samu
 }
 
 installPhase() {
-	./build/muon-bootstrap -C build install -d "$PWD/out"
+	muon -C build install -d "$PWD/out"
 }
 
 metadataPhase() {

@@ -4,7 +4,7 @@ src="git+https://github.com/pkgconf/pkgconf#a88c0d962a987c62d98ede5a738e37ec7100
 rel=1
 
 downloadPhase() {
-	tce-load -wil compiletc muon-min
+	tce-load -wil compiletc muon-bootstrap
 }
 
 patchPhase() {
