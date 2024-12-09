@@ -17,7 +17,7 @@ done
 
 trap '__broken trapped' EXIT
 
-set -eux
+set -eux -o pipefail
 
 downloadPhase() {
 	: doing nothing
