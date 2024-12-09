@@ -1,0 +1,38 @@
+pname="pkgconf"
+version="2.3.0"
+src="git+https://github.com/pkgconf/pkgconf#a88c0d962a987c62d98ede5a738e37ec71005cbd"
+
+downloadPhase() {
+	tce-load -wil compiletc muon-min
+}
+
+patchPhase() {
+	sed -i "/^subdir('tests')$/d" src/meson.build
+}
+
+configurePhase() {
+	muon -C src setup -Dtests=disabled "$PWD/build"
+}
+
+buildPhase() {
+	muon -C build samu
+}
+
+installPhase() {
+	muon -C build install -d "$PWD/out"
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    package compiler and linker metadata toolkit
+Version:        $version
+Author:         Ariadne Conill
+Original-site:  https://pkgconf.org
+Copying-policy: ISC
+Size:           0
+Extension_by:   xfnw
+Tags:           build pkg-config
+Comments:       ----
+EOF
+}
