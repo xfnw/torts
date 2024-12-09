@@ -1,0 +1,30 @@
+From 74174cbb3e9e1386982b18ffd0ab0e4fe72c98b2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=BCrg=20Billeter?= <j@bitron.ch>
+Date: Wed, 6 Nov 2024 10:29:59 +0100
+Subject: [PATCH] fix build without git
+
+    muon/tests/project/meson.build:452:34: error undefined object meson_tests_dir
+    452 | skip_meson_tests = not fs.is_dir(meson_tests_dir)
+                                           ^______________
+---
+ tests/project/meson.build | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tests/project/meson.build b/tests/project/meson.build
+index a3f33eb8..ae52a657 100644
+--- a/tests/project/meson.build
++++ b/tests/project/meson.build
+@@ -401,8 +401,9 @@ else
+     endif
+ endif
+ 
++meson_tests_dir = meson.current_source_dir() / 'meson-tests'
++
+ if git.found()
+-    meson_tests_dir = meson.current_source_dir() / 'meson-tests'
+     meson_tests_sha = '1e565931348f15f3f9b654f46ab4bf5fa009ca4f'
+ 
+     if not fs.is_dir(meson_tests_dir)
+-- 
+2.45.2
+
