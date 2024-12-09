@@ -1,9 +1,10 @@
 pname="muon"
 version="0.3.1"
 src="tarball+https://muon.build/releases/v0.3.1/muon-v0.3.1.tar.gz#45f6ad728946a0788188004e3a88a77a7d07b48525ce0646430589d1db4c832e"
+rel=1
 
 downloadPhase() {
-	tce-load -wil compiletc
+	tce-load -wil compiletc pkgconf
 }
 
 patchPhase() {
