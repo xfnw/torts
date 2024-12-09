@@ -1,0 +1,46 @@
+pname="muon"
+version="0.3.1"
+src="tarball+https://muon.build/releases/v0.3.1/muon-v0.3.1.tar.gz#45f6ad728946a0788188004e3a88a77a7d07b48525ce0646430589d1db4c832e"
+
+downloadPhase() {
+	tce-load -wil compiletc
+}
+
+patchPhase() {
+	cd src
+	# XXX: remove me after muon 0.4
+	patch -p1 <../fix-without-git.patch
+}
+
+configurePhase() {
+	cd src
+	CC=gcc ./bootstrap.sh ../build
+
+	# XXX: remove me after muon 0.4
+	mv ../build/muon ../build/muon-bootstrap
+
+	../build/muon-bootstrap setup ../build
+}
+
+buildPhase() {
+	./build/muon-bootstrap -C build samu
+}
+
+installPhase() {
+	./build/muon-bootstrap -C build install -d "$PWD/out"
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    meson-compatible build system
+Version:        $version
+Author:         Stone Tickle
+Original-site:  https://muon.build
+Copying-policy: GPL-3.0-only
+Size:           0
+Extension_by:   xfnw
+Tags:           build meson
+Comments:       ----
+EOF
+}
