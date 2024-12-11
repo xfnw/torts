@@ -1,0 +1,34 @@
+pname="libfuse3"
+
+downloadPhase() {
+	tce-load -wil libfuse3-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	cp -r /tmp/tcloop/libfuse3-full/. out
+}
+
+fixupPhase() {
+	rm -r \
+		out/usr/local/share \
+		out/usr/local/include \
+		out/usr/local/lib
+
+	sudo chown -R root:root out
+	sudo chmod u+s out/usr/local/bin/fusermount3
+}
+
+metadataPhase() {
+	copyinfo libfuse3-full
+}
+
+submitPhase() {
+	# submitqc "fixing" includes wiping our setuid
+	tce-load -wil submitqc
+	submitqc -c --libs --strip --no-fix "$pname.tcz"
+}
+
