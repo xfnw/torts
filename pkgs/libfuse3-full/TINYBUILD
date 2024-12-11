@@ -1,0 +1,56 @@
+pname="libfuse3-full"
+version="3.16.2"
+src="git+https://github.com/libfuse/libfuse#7a92727d97c10290b3501d86a194738973edb61d"
+
+downloadPhase() {
+	tce-load -wil compiletc muon
+}
+
+configurePhase() {
+	muon -C src setup -Dudevrulesdir=/etc/udev/rules.d/ -Duseroot=false "$PWD/build"
+}
+
+buildPhase() {
+	muon -C build samu
+}
+
+installPhase() {
+	muon -C build install -d "$PWD/out"
+}
+
+fixupPhase() {
+	tce-load -wil sstrip
+	find out/usr/local/bin -type f -executable -exec sstrip -z {} \;
+
+	mkdir -p out/usr/local/tce.installed
+	cat > "out/usr/local/tce.installed/$pname" <<EOF
+udevadm control --reload-rules
+udevadm trigger
+EOF
+
+	sudo chown -R root:root out
+	sudo chmod u+s out/usr/local/bin/fusermount3
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    An interface for filesystems in userspace
+Version:        $version
+Author:         Miklos Szeredi <miklos@szeredi.hu>
+Original-site:  https://github.com/libfuse/libfuse/
+Copying-policy: GPL-2.0-only AND LGPL-2.1-only
+Size:           0
+Extension_by:   xfnw
+Tags:           fuse filesystem
+Comments:       LGPL-2.1-only is for contents of lib and include,
+                while GPL-2.0-only is for everything else
+EOF
+}
+
+submitPhase() {
+	# submitqc "fixing" includes wiping our setuid
+	tce-load -wil submitqc
+	submitqc -c --libs --strip --no-fix "$pname.tcz"
+}
+
