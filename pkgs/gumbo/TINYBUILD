@@ -1,0 +1,24 @@
+pname="gumbo"
+
+downloadPhase() {
+	tce-load -wil gumbo-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	mkdir -p out/usr/local/lib
+	cp -r \
+		/tmp/tcloop/gumbo-full/usr/local/lib/*.so* \
+		out/usr/local/lib
+}
+
+fixupPhase() {
+	: skip
+}
+
+metadataPhase() {
+	copyinfo gumbo-full
+}

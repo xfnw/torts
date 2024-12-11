@@ -1,0 +1,30 @@
+pname="gumbo-dev"
+
+downloadPhase() {
+	tce-load -wil gumbo-full
+}
+
+buildPhase() {
+	: skip
+}
+
+installPhase() {
+	mkdir -p out/usr/local
+	cp -r \
+		/tmp/tcloop/gumbo-full/usr/local/lib \
+		out/usr/local
+	cp -r \
+		/tmp/tcloop/gumbo-full/usr/local/include \
+		out/usr/local
+}
+
+fixupPhase() {
+	rm out/usr/local/lib/*.so*
+}
+
+metadataPhase() {
+	copyinfo gumbo-full
+	cat > "$pname.tcz.dep" <<EOF
+gumbo.tcz
+EOF
+}
