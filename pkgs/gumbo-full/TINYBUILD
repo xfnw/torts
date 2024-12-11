@@ -1,0 +1,37 @@
+pname="gumbo-full"
+version="0.12.2"
+src="git+https://codeberg.org/gumbo-parser/gumbo-parser#c18bf3be52a0154669902f5edee96606e5ef0f1c"
+
+downloadPhase() {
+	tce-load -wil compiletc automake libtool-dev
+}
+
+patchPhase() {
+	cd src
+	patch -p1 <../revert-autoconf-bump.patch
+}
+
+configurePhase() {
+	cd src
+	./autogen.sh
+	./configure
+}
+
+fixupPhase() {
+	: skip
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    c99 html5 parsing library
+Version:        $version
+Author:         Jonathan Tang, nostrademons, Grigory Kirillov
+Original-site:  https://codeberg.org/gumbo-parser/gumbo-parser
+Copying-policy: Apache-2.0
+Size:           0
+Extension_by:   xfnw
+Tags:           html parser library
+Comments:       ----
+EOF
+}
