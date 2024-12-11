@@ -1,0 +1,48 @@
+pname="httpdirfs"
+version="1.2.7"
+src="git+https://github.com/fangfufu/httpdirfs#502dbeca967f593d3153bb67351d3fd194187e23"
+
+# curl is too old before tc 11
+broken="..11"
+
+downloadPhase() {
+	tce-load -wil compiletc muon gumbo-dev curl-dev libfuse3-dev expat2-dev
+}
+
+patchPhase() {
+	# do not error for snprintf size warnings
+	sed -i '/werror=true/d' src/meson.build
+}
+
+configurePhase() {
+	muon -C src setup -Dc_args=-D_FILE_OFFSET_BITS=64 "$PWD/build"
+}
+
+buildPhase() {
+	muon -C build samu
+}
+
+installPhase() {
+	muon -C build install -d "$PWD/out"
+}
+
+metadataPhase() {
+	cat - changelog > "$pname.tcz.info" <<EOF
+Title:          $pname.tcz
+Description:    A fuse filesystem to for HTTP directory listings
+Version:        $version
+Author:         fangfufu
+Original-site:  https://github.com/fangfufu/httpdirfs
+Copying-policy: GPL-3.0-only
+Size:           0
+Extension_by:   xfnw
+Tags:           fuse filesystem http
+Comments:       ----
+EOF
+	cat > "$pname.tcz.dep" <<EOF
+curl.tcz
+expat2.tcz
+libfuse3.tcz
+gumbo.tcz
+EOF
+}
