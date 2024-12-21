@@ -96,6 +96,7 @@ __upload() {
 }
 
 __broken() {
+	[ -e log ] || echo failed to evaluate > log
 	tce-load -wil curl
 	curl -X POST -Flog=@log "$SCRIPT?ver=$MAJORVER&arch=$ARCH&broken=$1"
 }
