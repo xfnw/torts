@@ -1,6 +1,6 @@
 pname="gumbo-full"
-version="0.12.3"
-src="git+https://codeberg.org/gumbo-parser/gumbo-parser#cab9cc5548ccaa33fa436e9acbba6ef3a0d8e5d6"
+version="0.13.0"
+src="git+https://codeberg.org/gumbo-parser/gumbo-parser#d817b36ec3af39ebdb3cf2a12a726bed373ff21f"
 
 downloadPhase() {
 	tce-load -wil compiletc automake libtool-dev
