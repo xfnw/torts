@@ -4,7 +4,8 @@ src="git+https://github.com/arvidn/libtorrent#74bc93a37a5e31c78f0aa02037a68fb9ac
 
 # tc was messing with its openssl naming scheme in 11 through 13
 # boost-1.84 is only in tc 15
-broken="..15"
+# cmake is not yet available in tc 16
+broken="..15 16"
 
 downloadPhase() {
 	tce-load -wil compiletc cmake openssl-dev boost-1.84-dev
