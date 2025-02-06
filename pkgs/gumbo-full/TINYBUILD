@@ -1,20 +1,21 @@
 pname="gumbo-full"
-version="0.13.0"
-src="git+https://codeberg.org/gumbo-parser/gumbo-parser#d817b36ec3af39ebdb3cf2a12a726bed373ff21f"
+version="0.13.0-unstable-2025-01-31"
+src="git+https://codeberg.org/gumbo-parser/gumbo-parser#81338be836665da612fddd173a40d18da4254ee5"
 
 downloadPhase() {
-	tce-load -wil compiletc automake libtool-dev
-}
-
-patchPhase() {
-	cd src
-	patch -p1 <../revert-autoconf-bump.patch
+	tce-load -wil compiletc muon
 }
 
 configurePhase() {
-	cd src
-	./autogen.sh
-	./configure
+	muon -C src setup -Ddefault_library=both -Dtests=false "$PWD/build"
+}
+
+buildPhase() {
+	muon -C build samu
+}
+
+installPhase() {
+	muon -C build install -d "$PWD/out"
 }
 
 fixupPhase() {
