@@ -1,7 +1,6 @@
 pname="irccrab"
-version="1.1.0"
-src="git+https://github.com/xfnw/irccrab#0f77322cab1222f4c9f76cff8584f624d63ca6f5"
-rel=1
+version="1.2.0"
+src="git+https://github.com/xfnw/irccrab#ef6d52cec6a1a9d4422b8ed876c717502cb7b3a9"
 
 # rust is not packaged for tc 10
 # before tc 15: cargo needs openssl-1.1.1 for some reason, full
