@@ -1,24 +1,14 @@
 pname="muon"
-version="0.3.1"
-src="tarball+https://muon.build/releases/v0.3.1/muon-v0.3.1.tar.gz#45f6ad728946a0788188004e3a88a77a7d07b48525ce0646430589d1db4c832e"
-rel=2
+version="0.4.0"
+src="tarball+https://muon.build/releases/v0.4.0/muon-v0.4.0.tar.gz#9121f2521fb5037a87a922573b7fd886f0c4e7eb17696dd80901d810b9b56609"
 
 downloadPhase() {
 	tce-load -wil compiletc pkgconf
 }
 
-patchPhase() {
-	cd src
-	# XXX: remove me after muon 0.4
-	patch -p1 <../fix-without-git.patch
-}
-
 configurePhase() {
 	cd src
 	CC=gcc ./bootstrap.sh ../build
-
-	# XXX: remove me after muon 0.4
-	mv ../build/muon ../build/muon-bootstrap
 
 	../build/muon-bootstrap setup ../build
 }
