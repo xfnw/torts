@@ -1,6 +1,6 @@
 pname="gumbo-full"
-version="0.13.0-unstable-2025-01-31"
-src="git+https://codeberg.org/gumbo-parser/gumbo-parser#81338be836665da612fddd173a40d18da4254ee5"
+version="0.13.1"
+src="git+https://codeberg.org/gumbo-parser/gumbo-parser#abe1745710947b9ab7b4b806934b1ee3831f4c0e"
 
 downloadPhase() {
 	tce-load -wil compiletc muon
