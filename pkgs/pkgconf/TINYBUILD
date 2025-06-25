@@ -1,6 +1,6 @@
 pname="pkgconf"
-version="2.4.3"
-src="git+https://github.com/pkgconf/pkgconf#1d37e711cefe83e6b5393b424af4c94da4e7e9d3"
+version="2.5.1"
+src="git+https://github.com/pkgconf/pkgconf#4fc570f91d9d8d843ab32d2198a5c064538d8ffd"
 
 downloadPhase() {
 	tce-load -wil compiletc muon-bootstrap
