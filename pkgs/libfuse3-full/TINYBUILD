@@ -2,6 +2,12 @@ pname="libfuse3-full"
 version="3.16.2"
 src="git+https://github.com/libfuse/libfuse#7a92727d97c10290b3501d86a194738973edb61d"
 
+# samu: job failed with status 1: cc  -o util/mount.fuse3 util/mount.fuse3.p/mount.fuse.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,--start-group lib/libfuse3.a /usr/lib/libdl.so /usr/lib/librt.so -Wl,--end-group
+# and
+# /usr/local/bin/ld: lib/libfuse3.a(fuse.c.o): undefined reference to symbol 'pthread_getspecific@@GLIBC_2.0'
+# /usr/local/bin/ld: /lib/libpthread.so.0: error adding symbols: DSO missing from command line
+broken="..=10"
+
 downloadPhase() {
 	tce-load -wil compiletc muon
 }
